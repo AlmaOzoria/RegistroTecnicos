@@ -14,4 +14,9 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Components\Pages\TecnicosPages\" />
+    <Folder Include="Services\" />
+  </ItemGroup>
+
 </Project>
