@@ -16,6 +16,7 @@
 
   <ItemGroup>
     <Folder Include="Components\Pages\TecnicosPages\" />
+    <Folder Include="Data\" />
     <Folder Include="Services\" />
   </ItemGroup>
 
