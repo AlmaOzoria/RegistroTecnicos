@@ -14,6 +14,8 @@ namespace RegistroTecnicos
             // Add services to the container.
             builder.Services.AddRazorComponents()
                 .AddInteractiveServerComponents();
+            builder.Services.AddSingleton<Radzen.NotificationService>();
+            builder.Services.AddBlazorBootstrap();
 
             // Agregando el Construtor
             var ConStr = builder.Configuration.GetConnectionString("ConStr");
