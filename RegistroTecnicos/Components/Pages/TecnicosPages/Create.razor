@@ -3,6 +3,7 @@
 @inject TecnicoServices tecnicosService
 @rendermode InteractiveServer
 
+
 <EditForm Model="Tecnicos" OnValidSubmit="Guardar">
     <DataAnnotationsValidator />
     @*Alerta Guardado*@
@@ -31,12 +32,12 @@
                 </div>
             </div>
             @* Nombre *@
-           <div class="mb-3">
-                    <label for="Nombre" class="form-label">Nombre:</label>
-                    <InputText @bind-Value="Tecnicos.Nombre" class="form-control" />
+            <div class="mb-3">
+                <label for="Nombre" class="form-label">Nombre:</label>
+                <InputText @bind-Value="Tecnicos.Nombre" class="form-control" />
                 <ValidationMessage For="@(() => Tecnicos.Nombre)" />
-         
-                </div>
+
+            </div>
             @* Sueldo Por Hora *@
             <div class="mb-3">
                 <label for="SueldoHora" class="form-label">Sueldo por Hora:</label>
@@ -44,29 +45,29 @@
                 <ValidationMessage For="@(() => Tecnicos.SueldoHora)" />
             </div>
         </div>
-     </div>
-         <div class="card-footer bg-light d-flex justify-content-center mt-3">
-             <div class="btn-group">
-                @*Boton Nuevo*@
-                <button type="button" class="btn btn-outline-primary ml-2" @onclick="Nuevo"><span class="bi bi-plus"></span> Nuevo </button>
-                @*Boton Guardar*@
-                <button type="submit" class="btn btn-outline-success ml-2"><span class="bi bi-check-circle-fill"></span> Guardar </button>
-                @*Boton Retroceder*@
-                <a type="button" href="/Tecnico/Index/" class="btn btn-outline-danger"><span class="bi bi-arrow-bar-left"></span> Retroceder </a>
-            </div>
-         </div>
-    </EditForm>
+    </div>
+    <div class="card-footer bg-light d-flex justify-content-center mt-3">
+        <div class="btn-group">
+            @*Boton Nuevo*@
+            <button type="button" class="btn btn-outline-primary ml-2" @onclick="Nuevo"><span class="bi bi-plus"></span> Nuevo </button>
+            @*Boton Guardar*@
+            <button type="submit" class="btn btn-outline-success ml-2"><span class="bi bi-check-circle-fill"></span> Guardar </button>
+            @*Boton Retroceder*@
+            <a type="button" href="/Tecnico/Index/" class="btn btn-outline-danger"><span class="bi bi-arrow-bar-left"></span> Retroceder </a>
+        </div>
+    </div>
+</EditForm>
 
 @code {
     [Parameter]
-    public int TecnicoId{ get; set; }
+    public int TecnicoId { get; set; }
     public Tecnicos Tecnicos { get; set; } = new Tecnicos();
-    public int? tecnicoId{ get; set; }
+    public int? tecnicoId { get; set; }
     public bool Existe { get; set; } = false;
     public bool mostrarNotificacion = false;
-    AlertColor arlertColorGuardo, alertIconNameGuardo;
-    IconName arlertIconNameError, alertColorGuardo;
-    string alertaGuardo, AlertaError = "";
+    AlertColor alertColorGuardo, alertColorError;
+    IconName alertIconNameGuardo, alertIconNameError;
+    string alertaGuardo = "", alertaError = "";
 
     public async Task MostrarNotificacion()
     {
@@ -80,16 +81,15 @@
     public void AlertaGuardado()
     {
         alertColorGuardo = AlertColor.Success;
-        alertIconNameGuardo = alertIconNameGuardo.CheckCircleFill;
-        alertaGuardo = "El técnico se registro de manera correcta.";
-
+        alertIconNameGuardo = IconName.CheckCircleFill;
+        alertaGuardo = "El técnico se registró de manera correcta.";
     }
 
     public void AlertaError()
     {
         alertColorError = AlertColor.Danger;
-        alertIconNameError = alertIconNameGuardo.ExclamationTriangleFill;
-        AlertaError = "Ya existe un técnico registrado con ese nombre.";
+        alertIconNameError = IconName.ExclamationTriangleFill;
+        alertaError = "Ya existe un técnico registrado con ese nombre.";
     }
 
     protected override void OnInitialized()
@@ -105,7 +105,7 @@
         if (await Validar())
         {
             AlertaError();
-            MostrarNotificacion();
+            await MostrarNotificacion();
             return;
         }
         else
@@ -114,26 +114,27 @@
             if (guardar)
             {
                 AlertaGuardado();
-                MostrarNotificacion();
+                await MostrarNotificacion();
                 return;
             }
             else
             {
                 AlertaError();
-                MostrarNotificacion();
-
+                await MostrarNotificacion();
             }
         }
     }
+
 
     public void Nuevo()
     {
         this.Tecnicos = new Tecnicos();
     }
 
-    public async Task <bool> Validar()
+    public async Task<bool> Validar()
     {
         bool existeNomre = await tecnicosService.ExiteNombre(Tecnicos.Nombre, Tecnicos.TecnicoId);
         return existeNomre;
     }
+    
 }
