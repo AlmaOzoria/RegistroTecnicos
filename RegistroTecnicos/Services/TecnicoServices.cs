@@ -58,6 +58,7 @@ public class TecnicoServices
     {
         return await _contexto.Tecnicos          
             .AsNoTracking()
+            .Include(t => t.TiposTecnicos)
             .Where(criterio)
             .ToListAsync();
     }
@@ -73,5 +74,9 @@ public class TecnicoServices
             return await _contexto.Tecnicos.AnyAsync(t => t.Nombre == nombre);
         }
     }
-        
+
+    public async Task<List<TiposTecnicos>> ObtenerTiposTecnicos()
+    {
+        return await _contexto.TiposTecnicos.ToListAsync();
+    }
 }
