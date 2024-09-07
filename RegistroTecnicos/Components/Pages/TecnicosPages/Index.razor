@@ -58,7 +58,7 @@
                 <tr>
                     <td>@tecnico.TecnicoId</td>
                     <td>@tecnico.Nombre</td>
-                    <td></td>
+                    <td>@tecnico.TiposTecnicos?.Descripcion</td>
                     <td>@tecnico.SueldoHora</td>
                     
                     <td>
@@ -92,6 +92,7 @@
 </EditForm>
 
 @code{
+    public Tecnicos tecnicos { get; set; } = new Tecnicos();
     public List<Tecnicos> ListaTecnicos = new List<Tecnicos>();
     private string valorFiltro = "";
     private string filtro = "Id";

@@ -38,6 +38,19 @@
                 <ValidationMessage For="@(() => Tecnicos.Nombre)" />
 
             </div>
+            @* Tipos Tecnicos *@
+            <div class="mb-3">
+                <label for="Nombre" class="form-label">Tipos Tecnicos:</label>
+               <InputSelect @bind-Value="Tecnicos.TiposTecnicosId" class="form-select" aria-label="TiposTecnicos">
+                <option selected>Selecciona un Tipo de Técnico</option>
+                    @foreach (var item in ListaTiposTecnicos)
+                    {
+                        <option value="@item.TipoTecnicoId">@item.Descripcion</option>
+                    }
+                </InputSelect>
+
+            </div
+
             @* Sueldo Por Hora *@
             <div class="mb-3">
                 <label for="SueldoHora" class="form-label">Sueldo por Hora:</label>
@@ -65,6 +78,7 @@
     public int? tecnicoId { get; set; }
     public bool Existe { get; set; } = false;
     public bool mostrarNotificacion = false;
+    public List<TiposTecnicos> ListaTiposTecnicos { get; set; } = new List<TiposTecnicos>();
     AlertColor alertColorGuardo, alertColorError;
     IconName alertIconNameGuardo, alertIconNameError;
     string alertaGuardo = "", alertaError = "";
@@ -136,5 +150,11 @@
         bool existeNomre = await tecnicosService.ExiteNombre(Tecnicos.Nombre, Tecnicos.TecnicoId);
         return existeNomre;
     }
+
+    protected override async Task OnInitializedAsync()
+    {
+        ListaTiposTecnicos = await tecnicosService.ObtenerTiposTecnicos();
+    }
+
     
 }
