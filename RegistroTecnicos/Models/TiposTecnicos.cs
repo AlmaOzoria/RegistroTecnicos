@@ -13,4 +13,5 @@ public class TiposTecnicos
     public string Descripcion { get; set; } = string.Empty;
     public ICollection<Tecnicos> Tecnicos { get; set; } = new List<Tecnicos>();
     
+    public Tecnicos? Tecnico { get; set; }
 }

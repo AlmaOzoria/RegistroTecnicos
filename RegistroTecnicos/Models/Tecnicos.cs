@@ -1,4 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 
 namespace RegistroTecnicos.Models;
 
@@ -14,6 +16,9 @@ public class Tecnicos
     [Range(0.01, double.MaxValue, ErrorMessage = "El campo sueldo por hora debe ser mayor que cero.")]
     public double SueldoHora { get; set; }
     public TiposTecnicos? TiposTecnicos { get; set; }
+
+    [ForeignKey("tiposTecnicos")]
+    public int TiposTecnicosId { get; set; }
 
 
 }
