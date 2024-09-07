@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using RegistroTecnicos.Models;
+using SQLitePCL;
 
 namespace RegistroTecnicos.DAL;
 
@@ -10,6 +11,16 @@ public class Contexto : DbContext
 
     public DbSet <Tecnicos> Tecnicos { get; set; }
     public DbSet<TiposTecnicos> TiposTecnicos { get; set; }
-   
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+
+        modelBuilder.Entity<Tecnicos>()
+            .HasOne(tt => tt.TiposTecnicos)
+            .WithMany(t => t.Tecnicos)
+            .HasForeignKey(t => t.TiposTecnicosId);
+
+        base.OnModelCreating(modelBuilder);
+    }
+    
 
 }
