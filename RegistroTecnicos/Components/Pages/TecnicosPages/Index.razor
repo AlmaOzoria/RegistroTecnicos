@@ -119,6 +119,11 @@
             {
                 ListaTecnicos = await tecnicoServices.Listar(t => t.SueldoHora == SueldoHora);
             }
+            else if (filtro == "tipo" && int.TryParse(valorFiltro, out int TipoTecnicoId))
+            {
+                string filtroMinuscula = valorFiltro.ToLower();
+                ListaTecnicos = await tecnicoServices.Listar(t => t.TiposTecnicos.Descripcion.ToLower().Contains(filtroMinuscula));
+            }
            
         }
         else
