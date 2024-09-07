@@ -30,11 +30,18 @@ namespace RegistroTecnicos.Migrations
                     Nombre = table.Column<string>(type: "TEXT", nullable: false),
                     TecnicoId = table.Column<int>(type: "INTEGER", nullable: false),
                     SueldoHora = table.Column<double>(type: "REAL", nullable: false),
+                    TiposTecnicosId = table.Column<int>(type: "INTEGER", nullable: false),
                     TiposTecnicosTipoTecnicoId = table.Column<int>(type: "INTEGER", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Tecnicos", x => x.Nombre);
+                    table.ForeignKey(
+                        name: "FK_Tecnicos_TiposTecnicos_TiposTecnicosId",
+                        column: x => x.TiposTecnicosId,
+                        principalTable: "TiposTecnicos",
+                        principalColumn: "TipoTecnicoId",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Tecnicos_TiposTecnicos_TiposTecnicosTipoTecnicoId",
                         column: x => x.TiposTecnicosTipoTecnicoId,
@@ -43,9 +50,15 @@ namespace RegistroTecnicos.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_Tecnicos_TiposTecnicosId",
+                table: "Tecnicos",
+                column: "TiposTecnicosId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Tecnicos_TiposTecnicosTipoTecnicoId",
                 table: "Tecnicos",
-                column: "TiposTecnicosTipoTecnicoId");
+                column: "TiposTecnicosTipoTecnicoId",
+                unique: true);
         }
 
         /// <inheritdoc />
