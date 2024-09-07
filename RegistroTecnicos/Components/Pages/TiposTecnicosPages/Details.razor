@@ -1,5 +1,5 @@
 ﻿@page "/TipoTecnico/Details"
-@page "/TipoTecnico/{TipoId:int}"
+@page "/TipoTecnico/Details/{TipoId:int}"
 @inject TiposTecnicosServices tiposTecnicosServices
 @inject NavigationManager navigationManager
 @rendermode InteractiveServer
@@ -41,6 +41,7 @@ else
     [Parameter]
     public int TipoId{ get; set; }
     public TiposTecnicos? TiposTecnicos { get; set; } = new TiposTecnicos();
+    private NavigationManager Navigation { get; set; }
 
     protected override async Task OnInitializedAsync()
     {

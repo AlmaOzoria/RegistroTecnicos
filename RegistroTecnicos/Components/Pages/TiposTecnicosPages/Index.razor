@@ -6,7 +6,7 @@
 <PageTitle>Consulta Tipos Tecnicos</PageTitle>
 <EditForm Model="ListarTiposTecnicos" class="border shadow-lg p-3 rounded">
     <div class="card-header bg-primary text-white text-center py-2 rounded">
-        <h3 style="font-weight: bold;" class="mb-0 font-weight-bold">Consulta TiposT&eacute;cnicos</h3>
+        <h3 style="font-weight: bold;" class="mb-0 font-weight-bold">Consulta Tipos T&eacute;cnicos</h3>
     </div>
     <div class="card-body">
         <div class="row mb-3 align-items-end">
@@ -57,12 +57,10 @@
                     <td>@tipoTecnico.TipoTecnicoId</td>
                     <td>@tipoTecnico.Descripcion</td>
                     <td>
-
                         @*Boton Detalles*@
                         <a href="/TipoTecnico/Details/@tipoTecnico.TipoTecnicoId" style="border: none; background-color: transparent;" class="btn-detalle">
-                            <span class="bi bi-info-circle-fill" style="font-size: 2rem;"></span>
+                            <span class="bi bi-eye" style="font-size: 2rem;"></span>
                         </a>
-
                     </td>
                     <td>
                         @*Boton Editar*@
@@ -74,7 +72,7 @@
                     <td>
                         @*Boton Eliminar*@
                         <a href="/TipoTecnico/Delete/@tipoTecnico.TipoTecnicoId" style="border: none; background-color: transparent;" class="btn-eliminar">
-                            <span class="bi bi-dash-circle-fill" style="font-size: 2rem;"></span>
+                            <i class="bi bi-trash3" style="font-size: 2rem;"></i>
                         </a>
                     </td>
                 </tr>
