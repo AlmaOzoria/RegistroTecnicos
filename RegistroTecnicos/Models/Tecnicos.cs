@@ -13,6 +13,7 @@ public class Tecnicos
     public int TecnicoId { get; set; }
     [Range(0.01, double.MaxValue, ErrorMessage = "El campo sueldo por hora debe ser mayor que cero.")]
     public double SueldoHora { get; set; }
+    public TiposTecnicos? TiposTecnicos { get; set; }
 
 
 }
