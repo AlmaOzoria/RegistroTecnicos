@@ -26,11 +26,22 @@
                 <InputText @bind-Value="Tecnicos.Nombre" class="form-control" />
                 <ValidationMessage For="@(() => Tecnicos.Nombre)" />
             </div>
+           
+            <div class="mb-3">
+                <label for="TiposTecnicos" class="form-label">Tipos Tecnicos:</label>
+                <InputSelect @bind-Value="Tecnicos.TiposTecnicosId" class="form-select" aria-label="TiposTecnicos">
+                    <option selected>Selecciona un Tipo de Técnico</option>
+                    @foreach (var item in ListaTiposTecnicos)
+                    {
+                        <option value="@item.TipoTecnicoId">@item.Descripcion</option>
+                    }
+                </InputSelect>
             <div class="mb-3">
                 <label for="SueldoHora" class="form-label">Sueldo por Hora:</label>
                 <InputNumber @bind-Value="Tecnicos.SueldoHora" class="form-control" />
                 <ValidationMessage For="@(() => Tecnicos.SueldoHora)" />
             </div>
+        </div>
         </div>
         <div class="card-footer bg-light d-flex justify-content-center mt-3">
             <div class="btn-group">
@@ -52,11 +63,14 @@
     public int TecnicoId { get; set; }
     Tecnicos Tecnicos { get; set; } = new Tecnicos();
     public bool Existe { get; set; } = false;
+    public List<TiposTecnicos> ListaTiposTecnicos { get; set; } = new List<TiposTecnicos>();
 
     protected override async Task OnInitializedAsync()
     {
+
         if (TecnicoId != 0)
         {
+            ListaTiposTecnicos = await tecnicoServices.ObtenerTiposTecnicos();
             await Buscar();
         }
     }
