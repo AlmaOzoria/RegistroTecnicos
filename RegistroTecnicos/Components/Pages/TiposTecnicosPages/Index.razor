@@ -111,6 +111,13 @@
             {
                 ListarTiposTecnicos = tiposTecnicosService.Listar(t => t.Descripcion == valorFiltro);
             }
+            else if (filtro == "descripcion")
+            {
+                string filtroMinuscula = valorFiltro.ToLower();
+                ListarTiposTecnicos = tiposTecnicosService.Listar(t => t.Descripcion.ToLower().Contains(filtroMinuscula));
+            }
+
+
         }
         else
         {
