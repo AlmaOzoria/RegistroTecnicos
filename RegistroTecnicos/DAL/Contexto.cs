@@ -11,6 +11,8 @@ public class Contexto : DbContext
 
     public DbSet <Tecnicos> Tecnicos { get; set; }
     public DbSet<TiposTecnicos> TiposTecnicos { get; set; }
+
+    public DbSet<Clientes> Clientes { get; set; }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
 
