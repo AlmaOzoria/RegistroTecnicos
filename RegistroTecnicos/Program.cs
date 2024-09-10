@@ -28,6 +28,8 @@ namespace RegistroTecnicos
 
             builder.Services.AddScoped<TiposTecnicosServices>();
 
+            builder.Services.AddScoped<ClientesServices>();
+
 
 
             var app = builder.Build();
