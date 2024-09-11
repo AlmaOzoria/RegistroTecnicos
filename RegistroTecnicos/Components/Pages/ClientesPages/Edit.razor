@@ -1,0 +1,109 @@
+﻿@page "/Cliente/Edit"
+@page "/Cliente/Edit/{ClientesId:int}"
+@inject ClientesServices clientesServices
+@rendermode InteractiveServer
+
+
+<EditForm Model="Clientes" OnValidSubmit="Guardar">
+    <DataAnnotationsValidator />
+    <div class="card shadow-lg border-0 rounded" style="background-color: #f8f9fa;">
+        <div class="card-header bg-primary text-white" style="text-align: center;">
+            <h3> <i class="fas fa-clipboard-list"></i> Editar Clientes</h3>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="IdCliente" class="form-label">ClienteId:</label>
+                    <div class="input-group">
+                        <div style="width: 40%; height: 1em;">
+                            <InputNumber @bind-Value="Clientes.ClientesId" class="form-control" style="font-size: 0.8em;" aria-describedby="BotonBuscar" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label for="Nombres" class="form-label">Nombres:</label>
+                <InputText @bind-Value="Clientes.Nombres" class="form-control" />
+                <ValidationMessage For="@(() => Clientes.Nombres)" />
+            </div>
+
+            <div class="mb-3">
+                <label for="WhatsApp" class="form-label">WhatsApp:</label>
+                <InputText @bind-Value="Clientes.WhatsApp" class="form-control" />
+                <ValidationMessage For="@(() => Clientes.WhatsApp)" />
+            </div>
+        </div>
+
+        
+    </div>
+        <div class="card-footer bg-light d-flex justify-content-center mt-3">
+            <div class="btn-group">
+                @*Boton Nuevo*@
+                <button type="button" class="btn btn-outline-primary ml-2" @onclick="Nuevo"><span class="bi bi-plus"></span> Nuevo </button>
+                @*Boton Guardar*@
+                <button type="submit" class="btn btn-outline-success ml-2"><span class="bi bi-check-circle-fill"></span> Guardar </button>
+                @*Boton Retroceder*@
+                <a type="button" href="/Cliente/Index/" class="btn btn-outline-danger"><span class="bi bi-arrow-bar-left"></span> Retroceder </a>
+            </div>
+        </div>
+</EditForm>
+
+@code {
+    [Parameter]
+    public int ClientesId { get; set; }
+    public bool Existe { get; set; } = false;
+    Clientes Clientes { get; set; } = new Clientes();
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (ClientesId != 0)
+        {
+            await Buscar();
+        }
+    }
+
+    public async Task Buscar()
+    {
+        Existe = false;
+        var encontro = await clientesServices.Buscar(ClientesId);
+
+        if (encontro != null)
+        {
+            Clientes = encontro;
+        }
+        else
+        {
+            Nuevo();
+        }
+    }
+
+    public async Task Guardar()
+    {
+        if (Validar())
+        {
+            return;
+        }
+        var guardo = await clientesServices.Guardar(Clientes);
+        if(guardo)
+        {
+            Nuevo();
+        }
+    }
+
+    public bool Validar()
+    {
+        Existe = clientesServices.Listar(t => t.Nombres!.ToLower() == Clientes.Nombres!.ToLower() && t.ClientesId != Clientes.ClientesId).Any();
+        return Existe;
+    }
+
+    public void Nuevo()
+    {
+        Clientes = new Clientes();
+        Existe = false;
+    }
+
+}
+
+
+
