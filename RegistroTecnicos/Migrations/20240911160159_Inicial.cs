@@ -16,8 +16,8 @@ namespace RegistroTecnicos.Migrations
                 {
                     ClientesId = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    Nombres = table.Column<string>(type: "TEXT", nullable: true),
-                    WhatsApp = table.Column<string>(type: "TEXT", nullable: true)
+                    Nombres = table.Column<string>(type: "TEXT", nullable: false),
+                    WhatsApp = table.Column<string>(type: "TEXT", maxLength: 10, nullable: true)
                 },
                 constraints: table =>
                 {

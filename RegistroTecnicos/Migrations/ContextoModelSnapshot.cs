@@ -24,9 +24,11 @@ namespace RegistroTecnicos.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Nombres")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("WhatsApp")
+                        .HasMaxLength(10)
                         .HasColumnType("TEXT");
 
                     b.HasKey("ClientesId");

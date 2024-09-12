@@ -11,7 +11,7 @@ using RegistroTecnicos.DAL;
 namespace RegistroTecnicos.Migrations
 {
     [DbContext(typeof(Contexto))]
-    [Migration("20240910234254_Inicial")]
+    [Migration("20240911160159_Inicial")]
     partial class Inicial
     {
         /// <inheritdoc />
@@ -27,9 +27,11 @@ namespace RegistroTecnicos.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Nombres")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("WhatsApp")
+                        .HasMaxLength(10)
                         .HasColumnType("TEXT");
 
                     b.HasKey("ClientesId");
