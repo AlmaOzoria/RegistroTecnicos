@@ -36,7 +36,7 @@ public class ClientesServices
 
     public async Task<bool> Guardar(Clientes clientes)
     {
-        if (await ExiteClientes(clientes.Nombres, clientes.ClientesId))
+        if (await ExiteNombres(clientes.Nombres, clientes.ClientesId))
         {
             return false;
         }
@@ -72,7 +72,7 @@ public class ClientesServices
             .FirstOrDefaultAsync(t => t.ClientesId == id);
     }
 
-    public async Task<bool> ExiteClientes(string nombre, int? clienteId = null)
+    public async Task<bool> ExiteNombres(string nombre, int? clienteId = null)
     {
         if (clienteId.HasValue)
         {
