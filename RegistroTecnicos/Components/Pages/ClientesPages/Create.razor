@@ -42,7 +42,7 @@
             @* WhatsApp *@
             <div class="mb-3">
                 <label for="WhatsApp" class="form-label">WhatsApp:</label>
-                <InputText @bind-Value="Clientes.WhatsApp" class="form-control" />
+                <InputText @bind-Value="Clientes.WhatsApp" class="form-control" @oninput="FormatWhatsAppNumber" />
                 <ValidationMessage For="@(() => Clientes.WhatsApp)" />
             </div>
         </div>
@@ -63,6 +63,7 @@
     [Parameter]
     public int ClientesId { get; set; }
     public Clientes Clientes { get; set; } = new Clientes();
+    public string WhatsAppFormatted { get; set; } = string.Empty;
     public int? clientesId { get; set; }
     public bool Existe { get; set; } = false;
     public bool mostrarNotificacion = false;
@@ -104,9 +105,11 @@
 
     public async Task Guardar()
     {
-        if (await Validar())
+        if (Clientes.WhatsApp?.Length != 10)
         {
-            AlertaError();
+            alertColorError = AlertColor.Danger;
+            alertIconNameError = IconName.ExclamationTriangleFill;
+            alertaError = "El WhatsApp debe tener exactamente 10 números.";
             await MostrarNotificacion();
             return;
         }
@@ -117,7 +120,7 @@
             {
                 AlertaGuardado();
                 await MostrarNotificacion();
-                return;
+                
             }
             else
             {
@@ -139,5 +142,28 @@
         return existeClientes;
     }
 
-    
+    private void FormatWhatsAppNumber(ChangeEventArgs e)
+    {
+        string input = e.Value?.ToString() ?? "";
+
+        
+        string cleaned = new string(input.Where(char.IsDigit).ToArray());
+
+        if (cleaned.Length <= 10)
+        {
+            if (cleaned.Length > 6)
+            {
+                Clientes.WhatsApp = $"({cleaned.Substring(0, 3)})-{cleaned.Substring(3, 3)}-{cleaned.Substring(6)}";
+            }
+            else if (cleaned.Length > 3)
+            {
+                Clientes.WhatsApp = $"({cleaned.Substring(0, 3)})-{cleaned.Substring(3)}";
+            }
+            else
+            {
+                Clientes.WhatsApp = cleaned;
+            }
+        }
+    }
+
 }

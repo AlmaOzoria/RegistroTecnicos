@@ -57,7 +57,8 @@
                 <tr>
                     <td>@clientes.ClientesId</td>
                     <td>@clientes.Nombres</td>
-                    <td>@clientes.WhatsApp</td>
+                    <td>@FormatWhatsAppNumber(clientes.WhatsApp)</td>
+
 
                     <td>
 
@@ -123,6 +124,27 @@
         else
         {
             ListaClientes =  clientesServices.Listar(t => true);
+        }
+    }
+
+    private string FormatWhatsAppNumber(string? numero)
+    {
+        if (string.IsNullOrEmpty(numero))
+        {
+            return string.Empty;
+        }
+
+        
+        string cleaned = new string(numero.Where(char.IsDigit).ToArray());
+
+       
+        if (cleaned.Length == 10)
+        {
+            return $"({cleaned.Substring(0, 3)})-{cleaned.Substring(3, 3)}-{cleaned.Substring(6)}";
+        }
+        else
+        {
+            return numero; 
         }
     }
 }
