@@ -1,0 +1,158 @@
+﻿@page "/Trabajo/Index"
+@inject TrabajosServices trabajosServices
+@rendermode InteractiveServer
+
+<EditForm Model="ListaTrabajos" class="border shadow-lg p-3 rounded">
+    <div class="card-header bg-primary text-white text-center py-2 rounded">
+        <h3 style="font-weight: bold;" class="mb-0 font-weight-bold">Consulta Trabajos</h3>
+    </div>
+    <div class="card-body">
+        <div class="row mb-3 align-items-end">
+
+            @*Filtro*@
+            <div class="col-md-3">
+                <label for="Filtro" class="form-label">Filtrar por:</label>
+                <select @bind="filtro" class="form-select">
+                    <option value="id">ID</option>
+                    <option value="trabajo">Trabajo</option>
+                    <option value="fecha">Fecha</option>
+                    <option value="cliente">Cliente</option>
+                    <option value="descripcion">Descripcion</option>
+                    <option value="monto">Monto</option>
+                </select>
+            </div>
+
+            @*Barra Busqueda*@
+            <div class="col-md-6">
+                <label for="ValorFiltro" class="form-label">Búsqueda:</label>
+                <div class="input-group">
+                    <input @bind="valorFiltro" class="form-control" placeholder="Buscar" />
+                    <button @onclick="Buscar" class="btn btn-outline-primary" type="button">
+                        <span class="bi bi-search"></span> Buscar
+                    </button>
+                </div>
+            </div>
+
+            @*Boton Crear*@
+            <div class="col-md-3 text-end">
+                <a href="/Trabajo/Create" class="btn btn-success" type="button"><span class="bi bi-floppy"></span> Crear </a>
+            </div>
+        </div>
+    </div>
+
+    @*Tabla*@
+    <table class="table table-bordered text-center">
+        <thead class="bg-primary text-white">
+            <tr>
+                <th>TrabajosId</th>
+                <th>Fecha</th>
+                <th>Cliente</th>
+                <th>Tecnico</th>
+                <th>Descripcion</th>
+                <th>Monto</th>
+                <th>Ver</th>
+                <th>Editar</th>
+                <th>Eliminar</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach (var trabajos in ListaTrabajos)
+            {
+                <tr>
+                    <td>@trabajos.TrabajosId</td>
+                    <td>@trabajos.Fecha.ToString("dd/MM/yyyy")</td>
+                    <td>@trabajos.clientes?.Nombres</td>
+                    <td>@trabajos.tecnicos?.Nombre</td>
+                    <td>@trabajos.Descripcion</td>
+                    <td>@trabajos.Monto</td>
+                    
+
+
+                    <td>
+
+                        @*Boton Details*@
+                        <a href="/Trabajo/Details/@trabajos.TrabajosId" style="border: none; background-color: transparent;" class="btn-detalle">
+                            <i class="bi bi-eye" style="font-size: 2rem;"></i>
+                        </a>
+
+                    </td>
+                    <td>
+                        @*Boton Editar*@
+                        <a href="/Trabajo/Edit/@trabajos.TrabajosId" style="border: none; background-color: transparent;" class="btn-editar">
+                            <span class="bi bi-marker-tip" style="font-size: 2rem;"></span>
+                        </a>
+                    </td>
+
+                    <td>
+                        @*Boton Eliminar*@
+                        <a href="/Trabajo/Delete/@trabajos.TrabajosId" style="border: none; background-color: transparent;" class="btn-eliminar">
+                            <i class="bi bi-trash3" style="font-size: 2rem;"></i>
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <div class="card-footer text-start">
+        <p> Total de  Trabajos: @ListaTrabajos.Count</p>
+    </div>
+</EditForm>
+
+@code {
+    public Trabajos trabajos { get; set; } = new Trabajos();
+    public List<Trabajos> ListaTrabajos = new List<Trabajos>();
+    private string valorFiltro = "";
+    private string filtro = "Id";
+
+    protected override async Task OnInitializedAsync()
+    {
+        ListaTrabajos = trabajosServices.Listar(c => true);
+    }
+
+    public async Task Buscar()
+    {
+        if (!string.IsNullOrWhiteSpace(valorFiltro))
+        {
+            if (filtro == "id" && int.TryParse(valorFiltro, out int TrabajosId))
+            {
+                ListaTrabajos = trabajosServices.Listar(t => t.TrabajosId == TrabajosId);
+            }
+            else if (filtro == "trabajo")
+            {
+                string filtroMinuscula = valorFiltro.ToLower();
+              //  ListaTrabajos = trabajosServices.Listar(t => t.TrabajosId.ToLower().Contains(filtroMinuscula));
+            }
+            else if (filtro == "fecha" && DateTime.TryParse(valorFiltro, out DateTime fecha))
+            {
+                ListaTrabajos = trabajosServices.Listar(t => t.Fecha.Date == fecha.Date);
+            }
+            else if (filtro == "cliente")
+            {
+               // ListaTrabajos = trabajosServices.Listar(t => t.ClienteId.ToString() == valorFiltro);
+            }
+            else if (filtro == "nombre")
+            {
+                string filtroMinuscula = valorFiltro.ToLower();
+                //ListaTrabajos = trabajosServices.Listar(t => t.Nombres.ToLower().Contains(filtroMinuscula));
+            }
+            else if (filtro == "descripcion")
+            {
+                string filtroMinuscula = valorFiltro.ToLower();
+                ListaTrabajos = trabajosServices.Listar(t => t.Descripcion.ToLower().Contains(filtroMinuscula));
+            }
+            else if (filtro == "monto" && decimal.TryParse(valorFiltro, out decimal monto))
+            {
+                ListaTrabajos = trabajosServices.Listar(t => t.Monto == monto);
+            }
+
+
+        }
+        else
+        {
+            ListaTrabajos = trabajosServices.Listar(t => true);
+        }
+    }
+
+    
+}
