@@ -11,10 +11,10 @@ public class Trabajos
     [Required(ErrorMessage = "El Campo Trabajo es obligatorio")]
     public int TrabajosId { get; set; }
 
-    [Required(ErrorMessage = "El Campo Nombre es obligatorio")]
-    public string? Nombres { get; set; }
-
     [Required(ErrorMessage = "El Campo Cliente es obligatorio")]
+
+    public Clientes? clientes { get; set; }
+    [ForeignKey("clientes")]
     public int ClientesId { get; set; }
 
     [Required(ErrorMessage = "El Campo  Descripcion es obligatorio.")]
@@ -25,6 +25,10 @@ public class Trabajos
     public decimal Monto { get; set; }
 
     [Required(ErrorMessage = "El Campo Fecha es obligatorio.")]
-    [DataType(DataType.Date)]
-    public DateTime Fecha { get; set; }
+    public DateTime Fecha { get; set; } = DateTime.Now;
+
+    public Tecnicos? tecnicos { get; set; }
+    [ForeignKey("tecnicos")]
+    
+    public int TecnicoId { get; set; }
 }
