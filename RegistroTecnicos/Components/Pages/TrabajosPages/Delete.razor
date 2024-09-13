@@ -1,0 +1,89 @@
+﻿@page "/Trabajo/Delete"
+@page "/Trabajo/Delete/{TrabajosId:int}"
+@inject TrabajosServices trabajosServices
+@inject NavigationManager navigationManager
+@inject NotificationService NotificationService
+@rendermode InteractiveServer
+
+<PageTitle>Eliminar Trabajos</PageTitle>
+@if (Trabajos != null)
+{
+    <div class="container">
+        <div class="card shadow-header">
+
+            <div class="card-header  bg-primary text-white text-center py-2 rounded">
+                <h3><strong>Eliminar Trabajos</strong></h3>
+            </div>
+            <div class="card-header">
+                <h3 class="text-danger">¿Estás seguro de que quieres eliminar el siguiente trabajos?</h3>
+            </div>
+
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="card shadow-lg">
+                            <div class="card-header">
+                                <h3 class="text-center"><strong>Datos del t&eacute;cnico</strong></h3>
+                            </div>
+                            <div class="card-body">
+                                <div class="border-primary border-2 borde">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-8">
+                                                <ul class="list-unstyled">
+                                                    <li><strong>TrabajosId:</strong> @Trabajos.TrabajosId</li>
+                                                    <li><strong>Fecha:</strong> @Trabajos.Fecha.ToString("dd/MM/yyyyy")</li>
+                                                    <li><strong>Clientes:</strong> @Trabajos.clientes?.Nombres</li>
+                                                    <li><strong>Tecnicos:</strong> @Trabajos.tecnicos?.Nombre</li>
+                                                    <li><strong>Descripcion:</strong> @Trabajos.Descripcion</li>
+                                                    <li><strong>Monto:</strong> @Trabajos.Monto</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-footer">
+                @*Boton Eliminar*@
+                <button type="button" class="btn btn-outline-danger" @onclick="EliminarTecnico"><i class="bi bi-trash-fill"></i> Eliminar</button>
+                @*Boton Volver*@
+                <button type="button" class="btn btn-outline-primary" @onclick="Volver"><i class="bi bi-box-arrow-left"></i> Volver</button>
+            </div>
+
+        </div>
+    </div>
+}
+else
+{
+    <p>Trabajos no encontrado.</p>
+}
+
+@code {
+    [Parameter]
+    public int TrabajosId { get; set; }
+    public Trabajos? Trabajos { get; set; } = new Trabajos();
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (TrabajosId != 0)
+        {
+            Trabajos = await trabajosServices.Buscar(TrabajosId);
+        }
+    }
+
+    public async Task EliminarTecnico()
+    {
+        var eliminado = await trabajosServices.Eliminar(Trabajos.TrabajosId);
+        Volver();
+    }
+
+    public void Volver()
+    {
+        navigationManager.NavigateTo("/Trabajo/Index");
+    }
+}
