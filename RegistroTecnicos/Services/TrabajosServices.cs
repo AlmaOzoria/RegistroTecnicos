@@ -36,10 +36,7 @@ public class TrabajosServices
 
     public async Task<bool> Guardar(Trabajos trabajos)
     {
-        if (await ExiteNombres(trabajos.Nombres, trabajos.TrabajosId))
-        {
-            return false;
-        }
+        
         if (!await Existe(trabajos.TrabajosId))
             return await Insertar(trabajos);
         else
@@ -61,6 +58,8 @@ public class TrabajosServices
     {
         return _contexto.Trabajos
             .AsNoTracking()
+            .Include(t => t.clientes)
+            .Include(t => t.tecnicos)
             .Where(criterio)
             .ToList();
     }
@@ -69,18 +68,20 @@ public class TrabajosServices
     {
         return await _contexto.Trabajos
             .AsNoTracking()
+            .Include(t => t.clientes)
+            .Include(t => t.tecnicos)
             .FirstOrDefaultAsync(t => t.TrabajosId == id);
     }
 
-    public async Task<bool> ExiteNombres(string nombre, int? trabajosId = null)
+    public async Task<List<Clientes>> ObtenerClientes()
     {
-        if (trabajosId.HasValue)
-        {
-            return await _contexto.Trabajos.AnyAsync(t => t.Nombres == nombre && t.TrabajosId != trabajosId);
-        }
-        else
-        {
-            return await _contexto.Trabajos.AnyAsync(t => t.Nombres == nombre);
-        }
+        return await _contexto.Clientes.ToListAsync();
     }
+
+    public async Task<List<Tecnicos>> ObtenerTecnicos()
+    {
+        return await _contexto.Tecnicos.ToListAsync();
+    }
+
+
 }
