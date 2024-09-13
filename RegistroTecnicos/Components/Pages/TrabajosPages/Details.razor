@@ -1,0 +1,60 @@
+﻿@page "/Trabajo/Details"
+@page "/Trabajo/Details/{TrabajosId:int}"
+@inject TrabajosServices trabajosServices
+@inject NavigationManager navigationManager
+@rendermode InteractiveServer
+
+<PageTitle>Detalles del Trabajo</PageTitle>
+@if (Trabajos != null)
+{
+    <div class="container">
+        <div class="card shadow-header">
+            <div class="card-header  bg-primary text-white text-center py-2 rounded">
+                <h3 class="text-center"><strong>Detalles del trabajos</strong></h3>
+            </div>
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-6">
+
+                        <div class="card-body">
+                            <ul class="list-unstyled">
+                                <li><strong>TrabajosId:</strong> @Trabajos.TrabajosId</li>
+                                <li><strong>Fecha:</strong> @Trabajos.Fecha.ToString("dd/MM/yyyyy")</li>
+                                <li><strong>Clientes:</strong> @Trabajos.clientes?.Nombres</li>
+                                <li><strong>Tecnicos:</strong> @Trabajos.tecnicos?.Nombre</li>
+                                <li><strong>Descripcion:</strong> @Trabajos.Descripcion</li>
+                                <li><strong>Monto:</strong> @Trabajos.Monto</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer">
+                <button type="button" class="btn btn-outline-primary" @onclick="Volver"><i class="bi bi-box-arrow-left"></i> Volver</button>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <p>Trabajos no encontrado.</p>
+}
+
+
+@code {
+    [Parameter]
+    public int TrabajosId { get; set; }
+    public Trabajos? Trabajos { get; set; } = new Trabajos();
+
+    protected override async Task OnInitializedAsync()
+    {
+        Trabajos = await trabajosServices.Buscar(TrabajosId);
+    }
+
+    public void Volver()
+    {
+        navigationManager.NavigateTo("/Trabajo/Index");
+    }
+
+}
+
