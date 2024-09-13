@@ -38,14 +38,16 @@ namespace RegistroTecnicos.Migrations
 
             modelBuilder.Entity("RegistroTecnicos.Models.Tecnicos", b =>
                 {
+                    b.Property<int>("TecnicoId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("Nombre")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<double>("SueldoHora")
                         .HasColumnType("REAL");
-
-                    b.Property<int>("TecnicoId")
-                        .HasColumnType("INTEGER");
 
                     b.Property<int>("TiposTecnicosId")
                         .HasColumnType("INTEGER");
@@ -53,7 +55,7 @@ namespace RegistroTecnicos.Migrations
                     b.Property<int?>("TiposTecnicosTipoTecnicoId")
                         .HasColumnType("INTEGER");
 
-                    b.HasKey("Nombre");
+                    b.HasKey("TecnicoId");
 
                     b.HasIndex("TiposTecnicosId");
 
@@ -78,6 +80,37 @@ namespace RegistroTecnicos.Migrations
                     b.ToTable("TiposTecnicos");
                 });
 
+            modelBuilder.Entity("RegistroTecnicos.Models.Trabajos", b =>
+                {
+                    b.Property<int>("TrabajosId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("ClientesId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Descripcion")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("Fecha")
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal>("Monto")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("TecnicoId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("TrabajosId");
+
+                    b.HasIndex("ClientesId");
+
+                    b.HasIndex("TecnicoId");
+
+                    b.ToTable("Trabajos");
+                });
+
             modelBuilder.Entity("RegistroTecnicos.Models.Tecnicos", b =>
                 {
                     b.HasOne("RegistroTecnicos.Models.TiposTecnicos", "TiposTecnicos")
@@ -91,6 +124,25 @@ namespace RegistroTecnicos.Migrations
                         .HasForeignKey("RegistroTecnicos.Models.Tecnicos", "TiposTecnicosTipoTecnicoId");
 
                     b.Navigation("TiposTecnicos");
+                });
+
+            modelBuilder.Entity("RegistroTecnicos.Models.Trabajos", b =>
+                {
+                    b.HasOne("RegistroTecnicos.Models.Clientes", "clientes")
+                        .WithMany()
+                        .HasForeignKey("ClientesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("RegistroTecnicos.Models.Tecnicos", "tecnicos")
+                        .WithMany()
+                        .HasForeignKey("TecnicoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("clientes");
+
+                    b.Navigation("tecnicos");
                 });
 
             modelBuilder.Entity("RegistroTecnicos.Models.TiposTecnicos", b =>

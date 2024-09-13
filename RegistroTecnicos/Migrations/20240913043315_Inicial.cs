@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
@@ -41,15 +42,16 @@ namespace RegistroTecnicos.Migrations
                 name: "Tecnicos",
                 columns: table => new
                 {
+                    TecnicoId = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
                     Nombre = table.Column<string>(type: "TEXT", nullable: false),
-                    TecnicoId = table.Column<int>(type: "INTEGER", nullable: false),
                     SueldoHora = table.Column<double>(type: "REAL", nullable: false),
                     TiposTecnicosId = table.Column<int>(type: "INTEGER", nullable: false),
                     TiposTecnicosTipoTecnicoId = table.Column<int>(type: "INTEGER", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Tecnicos", x => x.Nombre);
+                    table.PrimaryKey("PK_Tecnicos", x => x.TecnicoId);
                     table.ForeignKey(
                         name: "FK_Tecnicos_TiposTecnicos_TiposTecnicosId",
                         column: x => x.TiposTecnicosId,
@@ -63,6 +65,35 @@ namespace RegistroTecnicos.Migrations
                         principalColumn: "TipoTecnicoId");
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Trabajos",
+                columns: table => new
+                {
+                    TrabajosId = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    ClientesId = table.Column<int>(type: "INTEGER", nullable: false),
+                    Descripcion = table.Column<string>(type: "TEXT", nullable: false),
+                    Monto = table.Column<decimal>(type: "TEXT", nullable: false),
+                    Fecha = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    TecnicoId = table.Column<int>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Trabajos", x => x.TrabajosId);
+                    table.ForeignKey(
+                        name: "FK_Trabajos_Clientes_ClientesId",
+                        column: x => x.ClientesId,
+                        principalTable: "Clientes",
+                        principalColumn: "ClientesId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Trabajos_Tecnicos_TecnicoId",
+                        column: x => x.TecnicoId,
+                        principalTable: "Tecnicos",
+                        principalColumn: "TecnicoId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_Tecnicos_TiposTecnicosId",
                 table: "Tecnicos",
@@ -73,11 +104,24 @@ namespace RegistroTecnicos.Migrations
                 table: "Tecnicos",
                 column: "TiposTecnicosTipoTecnicoId",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Trabajos_ClientesId",
+                table: "Trabajos",
+                column: "ClientesId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Trabajos_TecnicoId",
+                table: "Trabajos",
+                column: "TecnicoId");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "Trabajos");
+
             migrationBuilder.DropTable(
                 name: "Clientes");
 
