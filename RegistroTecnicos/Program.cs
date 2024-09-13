@@ -30,6 +30,8 @@ namespace RegistroTecnicos
 
             builder.Services.AddScoped<ClientesServices>();
 
+            builder.Services.AddScoped<TrabajosServices>();
+
 
 
             var app = builder.Build();
