@@ -140,7 +140,7 @@
 {
     if (await Validar())
     {
-        //AlertaError();
+        
         await MostrarNotificacion();
         return;
     }
@@ -158,13 +158,7 @@
         await MostrarNotificacion();
     }
 }
-    // protected override void OnInitialized()
-    // {
-    //     if (TrabajosId != 0)
-    //     {
-    //         Trabajos.TrabajosId = TrabajosId; 
-    //     }
-    // }
+   
 
 
     public void Nuevo()
@@ -172,10 +166,10 @@
         this.Trabajos = new Trabajos();
     }
 
-    public async Task<bool> Validar()
+  public async Task<bool> Validar()
     {
-        bool Existe = await trabajosServices.Existe(Trabajos.TrabajosId);
-        return Existe;
+        bool existeTrabajos = await trabajosServices.Existe(Trabajos.TrabajosId);
+        return existeTrabajos;
     }
 
 
