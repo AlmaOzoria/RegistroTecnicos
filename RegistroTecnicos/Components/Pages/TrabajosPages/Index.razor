@@ -14,11 +14,8 @@
                 <label for="Filtro" class="form-label">Filtrar por:</label>
                 <select @bind="filtro" class="form-select">
                     <option value="id">ID</option>
-                    <option value="trabajo">Trabajo</option>
                     <option value="fecha">Fecha</option>
                     <option value="cliente">Cliente</option>
-                    <option value="descripcion">Descripcion</option>
-                    <option value="monto">Monto</option>
                 </select>
             </div>
 
@@ -118,34 +115,14 @@
             {
                 ListaTrabajos = trabajosServices.Listar(t => t.TrabajosId == TrabajosId);
             }
-            else if (filtro == "trabajo")
-            {
-                string filtroMinuscula = valorFiltro.ToLower();
-              //  ListaTrabajos = trabajosServices.Listar(t => t.TrabajosId.ToLower().Contains(filtroMinuscula));
-            }
             else if (filtro == "fecha" && DateTime.TryParse(valorFiltro, out DateTime fecha))
             {
                 ListaTrabajos = trabajosServices.Listar(t => t.Fecha.Date == fecha.Date);
             }
             else if (filtro == "cliente")
             {
-               // ListaTrabajos = trabajosServices.Listar(t => t.ClienteId.ToString() == valorFiltro);
+                ListaTrabajos = trabajosServices.Listar(t => t.clientes != null && t.clientes.Nombres == valorFiltro);
             }
-            else if (filtro == "nombre")
-            {
-                string filtroMinuscula = valorFiltro.ToLower();
-                //ListaTrabajos = trabajosServices.Listar(t => t.Nombres.ToLower().Contains(filtroMinuscula));
-            }
-            else if (filtro == "descripcion")
-            {
-                string filtroMinuscula = valorFiltro.ToLower();
-                ListaTrabajos = trabajosServices.Listar(t => t.Descripcion.ToLower().Contains(filtroMinuscula));
-            }
-            else if (filtro == "monto" && decimal.TryParse(valorFiltro, out decimal monto))
-            {
-                ListaTrabajos = trabajosServices.Listar(t => t.Monto == monto);
-            }
-
 
         }
         else
