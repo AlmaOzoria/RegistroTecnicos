@@ -31,6 +31,9 @@
             </div>
             <div class="card-footer">
                 <button type="button" class="btn btn-outline-primary" @onclick="Volver"><i class="bi bi-box-arrow-left"></i> Volver</button>
+                <a href=@($"https://wa.me/1{ObtenerWhatsApp()}?text={ObtenerMensaje()}") class="btn btn-outline-success" type="button" target="_blank" rel="noopener noreferrer">
+                    <span class="bi bi-whatsapp">   </span> Finalizar
+                 </a>
             </div>
         </div>
     </div>
@@ -49,6 +52,24 @@ else
     protected override async Task OnInitializedAsync()
     {
         Trabajos = await trabajosServices.Buscar(TrabajosId);
+    }
+
+    public string ObtenerWhatsApp()
+    {
+        string WhatsApp = Trabajos.clientes?.WhatsApp;
+        return WhatsApp;
+    }
+
+    public string ObtenerMensaje()
+    {
+        DateTime fechaActual = DateTime.Now;
+        string fechaFinalizada = fechaActual.ToString("dd/MM/yyyy");
+
+        DateTime hora = DateTime.Now;
+        string horaFinalizada = hora.ToString("hh:mm:ss tt");
+
+        string Mensaje = ($"Señor/a {Trabajos.clientes?.Nombres}, su trabajo de ({Trabajos.Descripcion}) ha sido finalizado el dia {fechaFinalizada}, a las {horaFinalizada}, por un monto total de RD${Trabajos.Monto}");
+        return Mensaje;
     }
 
     public void Volver()
