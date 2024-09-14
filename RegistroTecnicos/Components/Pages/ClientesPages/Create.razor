@@ -42,7 +42,7 @@
             @* WhatsApp *@
             <div class="mb-3">
                 <label for="WhatsApp" class="form-label">WhatsApp:</label>
-                <InputText @bind-Value="Clientes.WhatsApp" class="form-control" @oninput="FormatWhatsAppNumber" />
+                <InputText @bind-Value="Clientes.WhatsApp" class="form-control"  />
                 <ValidationMessage For="@(() => Clientes.WhatsApp)" />
             </div>
         </div>
@@ -142,28 +142,6 @@
         return existeClientes;
     }
 
-    private void FormatWhatsAppNumber(ChangeEventArgs e)
-    {
-        string input = e.Value?.ToString() ?? "";
-
-        
-        string cleaned = new string(input.Where(char.IsDigit).ToArray());
-
-        if (cleaned.Length <= 10)
-        {
-            if (cleaned.Length > 6)
-            {
-                Clientes.WhatsApp = $"({cleaned.Substring(0, 3)})-{cleaned.Substring(3, 3)}-{cleaned.Substring(6)}";
-            }
-            else if (cleaned.Length > 3)
-            {
-                Clientes.WhatsApp = $"({cleaned.Substring(0, 3)})-{cleaned.Substring(3)}";
-            }
-            else
-            {
-                Clientes.WhatsApp = cleaned;
-            }
-        }
-    }
+   
 
 }
