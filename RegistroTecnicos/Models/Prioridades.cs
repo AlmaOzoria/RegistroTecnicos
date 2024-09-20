@@ -16,4 +16,6 @@ public class Prioridades
     [Required(ErrorMessage = " El tiempo es obligatoria.")]
     public int Tiempo { get; set; }
 
+    public ICollection<Trabajos> Trabajos { get; set; } = new List<Trabajos>();
+
 }
