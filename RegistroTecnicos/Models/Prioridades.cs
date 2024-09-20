@@ -11,9 +11,9 @@ public class Prioridades
     public int PrioridadesId { get; set; }
 
     [Required(ErrorMessage = " La descripcion es obligatoria.")]
-    public string Descripcion { get; set; } = string.Empty;
+    public string Descripcion { get; set; } 
 
     [Required(ErrorMessage = " El tiempo es obligatoria.")]
-    public TimeSpan Tiempo { get; set; }
+    public int Tiempo { get; set; }
 
 }
