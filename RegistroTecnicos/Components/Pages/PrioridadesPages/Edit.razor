@@ -1,0 +1,108 @@
+﻿@page "/Prioridad/Edit"
+@page "/Prioridad/Edit/{PrioridadesId:int}"
+@inject PrioridadesServices prioridadesServices
+@rendermode InteractiveServer
+
+
+<EditForm Model="Prioridades" OnValidSubmit="Guardar">
+    <DataAnnotationsValidator />
+    <div class="card shadow-lg border-0 rounded" style="background-color: #f8f9fa;">
+        <div class="card-header bg-primary text-white" style="text-align: center;">
+            <h3> <i class="fas fa-clipboard-list"></i> Editar Prioridad</h3>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="IdPrioridades" class="form-label">PrioridadesId:</label>
+                    <div class="input-group">
+                        <div style="width: 40%; height: 1em;">
+                            <InputNumber @bind-Value="Prioridades.PrioridadesId" class="form-control" style="font-size: 0.8em;" aria-describedby="BotonBuscar" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label for="Descripcion" class="form-label">Descripcion:</label>
+                <InputText @bind-Value="Prioridades.Descripcion" class="form-control" />
+                <ValidationMessage For="@(() => Prioridades.Descripcion)" />
+            </div>
+
+            <div class="mb-3">
+                <label for="Tiempo" class="form-label">Tiempo:</label>
+                <InputNumber @bind-Value="Prioridades.Tiempo" class="form-control" />
+                <ValidationMessage For="@(() => Prioridades.Tiempo)" />
+            </div>
+        </div>
+
+
+    </div>
+    <div class="card-footer bg-light d-flex justify-content-center mt-3">
+        <div class="btn-group">
+            @*Boton Nuevo*@
+            <button type="button" class="btn btn-outline-primary ml-2" @onclick="Nuevo"><span class="bi bi-plus"></span> Nuevo </button>
+            @*Boton Guardar*@
+            <button type="submit" class="btn btn-outline-success ml-2"><span class="bi bi-check-circle-fill"></span> Guardar </button>
+            @*Boton Retroceder*@
+            <a type="button" href="/Prioridad/Index/" class="btn btn-outline-danger"><span class="bi bi-arrow-bar-left"></span> Retroceder </a>
+        </div>
+    </div>
+</EditForm>
+
+@code {
+    [Parameter]
+    public int PrioridadesId { get; set; }
+    public bool Existe { get; set; } = false;
+    Prioridades Prioridades { get; set; } = new Prioridades();
+
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (PrioridadesId != 0)
+        {
+            await Buscar();
+        }
+    }
+
+    public async Task Buscar()
+    {
+        Existe = false;
+        var encontro = await prioridadesServices.Buscar(PrioridadesId);
+
+        if (encontro != null)
+        {
+            Prioridades = encontro;
+        }
+        else
+        {
+            Nuevo();
+        }
+    }
+
+    public async Task Guardar()
+    {
+        if (await Validar())
+        {
+            return;
+        }
+        var guardo = await prioridadesServices.Guardar(Prioridades);
+        if (guardo)
+        {
+            Nuevo();
+        }
+    }
+
+    public async Task<bool> Validar()
+    {
+        var listaPrioridades = await prioridadesServices.Listar(t => t.Descripcion.ToLower() == Prioridades.Descripcion.ToLower() && t.PrioridadesId != Prioridades.PrioridadesId);
+        Existe = listaPrioridades.Any();
+        return Existe; 
+    }
+
+    public void Nuevo()
+    {
+        Prioridades = new Prioridades();
+        Existe = false;
+    }
+}
