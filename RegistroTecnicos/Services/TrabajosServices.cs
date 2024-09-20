@@ -62,6 +62,7 @@ public class TrabajosServices
             .Include(t => t.tecnicos)
             .Include(t => t.prioridades)
             .Where(criterio)
+            .OrderBy(t=> t.prioridades.PrioridadesId)
             .ToList();
     }
 
