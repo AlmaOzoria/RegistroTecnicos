@@ -43,7 +43,7 @@
             <div class="mb-3">
                 <label for="Clientes" class="form-label">Clientes:</label>
                <InputSelect @bind-Value="Trabajos.ClientesId" class="form-select" aria-label="Clientes">
-                <option selected>Selecciona un Clientes</option>
+                <option value="0">Selecciona un Clientes</option>
                     @foreach (var item in ListaClientes)
                     {
                         <option value="@item.ClientesId">@item.Nombres</option>
@@ -56,7 +56,7 @@
             <div class="mb-3">
                   <label for="Tecnicos" class="form-label">Tecnicos:</label>
                <InputSelect @bind-Value="Trabajos.TecnicoId" class="form-select" aria-label="TecnicoId">
-                <option selected>Selecciona un Tecnico</option>
+                <option value="0">Selecciona un Tecnico</option>
                     @foreach (var item in ListaTecnicos)
                     {
                         <option value="@item.TecnicoId">@item.Nombre</option>
@@ -77,7 +77,7 @@
             <div class="mb-3">
                 <label for="Prioridades" class="form-label">Prioridades:</label>
                <InputSelect @bind-Value="Trabajos.PrioridadesId" class="form-select" aria-label="Prioridades">
-                <option selected>Selecciona un Prioridad</option>
+                <option value="0">Selecciona un Prioridad</option>
                     @foreach (var item in ListaPrioridades)
                     {
                         <option value="@item.PrioridadesId">@item.Descripcion</option>
