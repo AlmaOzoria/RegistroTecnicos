@@ -45,8 +45,8 @@ namespace RegistroTecnicos.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<TimeSpan>("Tiempo")
-                        .HasColumnType("TEXT");
+                    b.Property<int>("Tiempo")
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("PrioridadesId");
 
@@ -116,12 +116,17 @@ namespace RegistroTecnicos.Migrations
                     b.Property<decimal>("Monto")
                         .HasColumnType("TEXT");
 
+                    b.Property<int>("PrioridadesId")
+                        .HasColumnType("INTEGER");
+
                     b.Property<int>("TecnicoId")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("TrabajosId");
 
                     b.HasIndex("ClientesId");
+
+                    b.HasIndex("PrioridadesId");
 
                     b.HasIndex("TecnicoId");
 
@@ -151,6 +156,12 @@ namespace RegistroTecnicos.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("RegistroTecnicos.Models.Prioridades", "prioridades")
+                        .WithMany("Trabajos")
+                        .HasForeignKey("PrioridadesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("RegistroTecnicos.Models.Tecnicos", "tecnicos")
                         .WithMany()
                         .HasForeignKey("TecnicoId")
@@ -159,7 +170,14 @@ namespace RegistroTecnicos.Migrations
 
                     b.Navigation("clientes");
 
+                    b.Navigation("prioridades");
+
                     b.Navigation("tecnicos");
+                });
+
+            modelBuilder.Entity("RegistroTecnicos.Models.Prioridades", b =>
+                {
+                    b.Navigation("Trabajos");
                 });
 
             modelBuilder.Entity("RegistroTecnicos.Models.TiposTecnicos", b =>

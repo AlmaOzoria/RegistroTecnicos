@@ -32,7 +32,7 @@ namespace RegistroTecnicos.Migrations
                     PrioridadesId = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     Descripcion = table.Column<string>(type: "TEXT", nullable: false),
-                    Tiempo = table.Column<TimeSpan>(type: "TEXT", nullable: false)
+                    Tiempo = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -89,7 +89,8 @@ namespace RegistroTecnicos.Migrations
                     Descripcion = table.Column<string>(type: "TEXT", nullable: false),
                     Monto = table.Column<decimal>(type: "TEXT", nullable: false),
                     Fecha = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    TecnicoId = table.Column<int>(type: "INTEGER", nullable: false)
+                    TecnicoId = table.Column<int>(type: "INTEGER", nullable: false),
+                    PrioridadesId = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -99,6 +100,12 @@ namespace RegistroTecnicos.Migrations
                         column: x => x.ClientesId,
                         principalTable: "Clientes",
                         principalColumn: "ClientesId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Trabajos_Prioridades_PrioridadesId",
+                        column: x => x.PrioridadesId,
+                        principalTable: "Prioridades",
+                        principalColumn: "PrioridadesId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Trabajos_Tecnicos_TecnicoId",
@@ -125,6 +132,11 @@ namespace RegistroTecnicos.Migrations
                 column: "ClientesId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Trabajos_PrioridadesId",
+                table: "Trabajos",
+                column: "PrioridadesId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Trabajos_TecnicoId",
                 table: "Trabajos",
                 column: "TecnicoId");
@@ -134,13 +146,13 @@ namespace RegistroTecnicos.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Prioridades");
-
-            migrationBuilder.DropTable(
                 name: "Trabajos");
 
             migrationBuilder.DropTable(
                 name: "Clientes");
+
+            migrationBuilder.DropTable(
+                name: "Prioridades");
 
             migrationBuilder.DropTable(
                 name: "Tecnicos");
