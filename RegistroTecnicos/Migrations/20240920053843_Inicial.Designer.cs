@@ -11,7 +11,7 @@ using RegistroTecnicos.DAL;
 namespace RegistroTecnicos.Migrations
 {
     [DbContext(typeof(Contexto))]
-    [Migration("20240913043315_Inicial")]
+    [Migration("20240920053843_Inicial")]
     partial class Inicial
     {
         /// <inheritdoc />
@@ -31,12 +31,29 @@ namespace RegistroTecnicos.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("WhatsApp")
-                        .HasMaxLength(10)
                         .HasColumnType("TEXT");
 
                     b.HasKey("ClientesId");
 
                     b.ToTable("Clientes");
+                });
+
+            modelBuilder.Entity("RegistroTecnicos.Models.Prioridades", b =>
+                {
+                    b.Property<int>("PrioridadesId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Descripcion")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<TimeSpan>("Tiempo")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("PrioridadesId");
+
+                    b.ToTable("Prioridades");
                 });
 
             modelBuilder.Entity("RegistroTecnicos.Models.Tecnicos", b =>

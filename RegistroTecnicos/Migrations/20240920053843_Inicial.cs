@@ -18,11 +18,25 @@ namespace RegistroTecnicos.Migrations
                     ClientesId = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     Nombres = table.Column<string>(type: "TEXT", nullable: false),
-                    WhatsApp = table.Column<string>(type: "TEXT", maxLength: 10, nullable: true)
+                    WhatsApp = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Clientes", x => x.ClientesId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Prioridades",
+                columns: table => new
+                {
+                    PrioridadesId = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Descripcion = table.Column<string>(type: "TEXT", nullable: false),
+                    Tiempo = table.Column<TimeSpan>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Prioridades", x => x.PrioridadesId);
                 });
 
             migrationBuilder.CreateTable(
@@ -119,6 +133,9 @@ namespace RegistroTecnicos.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "Prioridades");
+
             migrationBuilder.DropTable(
                 name: "Trabajos");
 
