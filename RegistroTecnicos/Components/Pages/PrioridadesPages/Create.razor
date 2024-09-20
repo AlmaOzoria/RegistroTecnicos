@@ -1,0 +1,143 @@
+﻿@page "/Prioridad/Create"
+@page "/Prioridad/Create/{PrioridadesId:int}"
+@inject PrioridadesServices prioridadesServices
+@rendermode InteractiveServer
+
+
+<EditForm Model="Prioridades" OnValidSubmit="Guardar">
+    <DataAnnotationsValidator />
+    @*Alerta Guardado*@
+    <Alert Color="@alertColorGuardo" Dismissable="false" Hidden="@(!mostrarNotificacion)">
+        <Icon Name="@alertIconNameGuardo" class="me-2"></Icon>@alertaGuardo
+    </Alert>
+    @*Alerta Error al guardar*@
+    <Alert Color="@alertColorError" Dismissable="false" Hidden="@(!mostrarNotificacion)">
+        <Icon Name="@alertIconNameError" class="me-2"></Icon>@alertaError
+    </Alert>
+    <div class="card shadow-lg border-0 rounded" style="background-color: #f8f9fa;">
+        <div class="card-header bg-primary text-white" style="text-align: center;">
+            <h3> <i class="fas fa-clipboard-list"></i> Registro de Prioridades</h3>
+        </div>
+        <div class="card-body">
+            @* PrioridadesId *@
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="PrioridadesId" class="form-label">PrioridadesId:</label>
+                    <div class="input-group">
+                        <div style="width: 40%; height: 1em;">
+                            <InputNumber @bind-Value="Prioridades.PrioridadesId" class="form-control" style="font-size: 0.8em;" aria-describedby="BotonBuscar" />
+                            <ValidationMessage For="@(() => Prioridades.PrioridadesId)" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @* Descripcion *@
+            <div class="mb-3">
+                <label for="Descripcion" class="form-label">Descripcion:</label>
+                <InputText @bind-Value="Prioridades.Descripcion" class="form-control" />
+                <ValidationMessage For="@(() => Prioridades.Descripcion)" />
+
+            </div>
+
+            @* Tiempo *@
+            <div class="mb-3">
+                <label for="Tiempo" class="form-label">Tiempo:</label>
+                <InputNumber @bind-Value="Prioridades.Tiempo" class="form-control" />
+                <ValidationMessage For="@(() => Prioridades.Tiempo)" />
+            </div>
+        </div>
+    </div>
+    <div class="card-footer bg-light d-flex justify-content-center mt-3">
+        <div class="btn-group">
+            @*Boton Nuevo*@
+            <button type="button" class="btn btn-outline-primary ml-2" @onclick="Nuevo"><span class="bi bi-plus"></span> Nuevo </button>
+            @*Boton Guardar*@
+            <button type="submit" class="btn btn-outline-success ml-2"><span class="bi bi-check-circle-fill"></span> Guardar </button>
+            @*Boton Retroceder*@
+            <a type="button" href="/Prioridad/Index/" class="btn btn-outline-danger"><span class="bi bi-arrow-bar-left"></span> Retroceder </a>
+        </div>
+    </div>
+</EditForm>
+
+@code {
+    [Parameter]
+    public int PrioridadesId { get; set; }
+    public Prioridades Prioridades { get; set; } = new Prioridades();
+    public int? prioridadesId { get; set; }
+    public bool Existe { get; set; } = false;
+    public bool mostrarNotificacion = false;
+    public List<Prioridades> ListaClientes { get; set; } = new List<Prioridades>();
+    AlertColor alertColorGuardo, alertColorError;
+    IconName alertIconNameGuardo, alertIconNameError;
+    string alertaGuardo = "", alertaError = "";
+
+    public async Task MostrarNotificacion()
+    {
+        mostrarNotificacion = true;
+        StateHasChanged();
+        await Task.Delay(5000);
+        mostrarNotificacion = false;
+        StateHasChanged();
+    }
+
+    public void AlertaGuardado()
+    {
+        alertColorGuardo = AlertColor.Success;
+        alertIconNameGuardo = IconName.CheckCircleFill;
+        alertaGuardo = "La prioridad se registró de manera correcta.";
+    }
+
+    public void AlertaError()
+    {
+        alertColorError = AlertColor.Danger;
+        alertIconNameError = IconName.ExclamationTriangleFill;
+        alertaError = "Ya existe una prioridad registrado con ese nombre.";
+    }
+
+    protected override void OnInitialized()
+    {
+        if (prioridadesId.HasValue)
+        {
+            Prioridades.PrioridadesId = prioridadesId.Value;
+        }
+    }
+
+    public async Task Guardar()
+    {
+
+            if (await Validar())
+            {
+                AlertaError();
+                await MostrarNotificacion();
+                return;
+            }
+            var guardar = await prioridadesServices.Guardar(Prioridades);
+            if (guardar)
+            {
+                AlertaGuardado();
+                await MostrarNotificacion();
+
+            }
+            else
+            {
+                AlertaError();
+                await MostrarNotificacion();
+            }
+        
+    }
+
+
+    public void Nuevo()
+    {
+        this.Prioridades = new Prioridades();
+    }
+
+    public async Task<bool> Validar()
+    {
+        bool existeprioridades = await prioridadesServices.ExisteDescripcion(Prioridades.Descripcion, Prioridades.PrioridadesId);
+        return existeprioridades;
+    }
+
+
+
+}
