@@ -30,7 +30,7 @@
             <div class="mb-3">
                 <label for="TiposTecnicos" class="form-label">Tipos Tecnicos:</label>
                 <InputSelect @bind-Value="Tecnicos.TiposTecnicosId" class="form-select" aria-label="TiposTecnicos">
-                    <option selected>Selecciona un Tipo de Técnico</option>
+                    <option value="0">Selecciona un Tipo de Técnico</option>
                     @foreach (var item in ListaTiposTecnicos)
                     {
                         <option value="@item.TipoTecnicoId">@item.Descripcion</option>
