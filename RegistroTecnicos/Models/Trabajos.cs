@@ -29,6 +29,10 @@ public class Trabajos
 
     public Tecnicos? tecnicos { get; set; }
     [ForeignKey("tecnicos")]
-    
     public int TecnicoId { get; set; }
+    public Prioridades? prioridades { get; set; }
+    [ForeignKey("prioridades")]
+    public int PrioridadesId { get; set; }
+
+
 }
