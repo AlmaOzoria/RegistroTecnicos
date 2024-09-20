@@ -60,6 +60,7 @@ public class TrabajosServices
             .AsNoTracking()
             .Include(t => t.clientes)
             .Include(t => t.tecnicos)
+            .Include(t => t.prioridades)
             .Where(criterio)
             .ToList();
     }
@@ -70,6 +71,7 @@ public class TrabajosServices
             .AsNoTracking()
             .Include(t => t.clientes)
             .Include(t => t.tecnicos)
+            .Include(t => t.prioridades)
             .FirstOrDefaultAsync(t => t.TrabajosId == id);
     }
 
@@ -81,7 +83,12 @@ public class TrabajosServices
     public async Task<List<Tecnicos>> ObtenerTecnicos()
     {
         return await _contexto.Tecnicos.ToListAsync();
+    } 
+    public async Task<List<Prioridades>> ObtenerPrioridades()
+    {
+        return await _contexto.Prioridades.ToListAsync();
     }
+
 
 
 }
