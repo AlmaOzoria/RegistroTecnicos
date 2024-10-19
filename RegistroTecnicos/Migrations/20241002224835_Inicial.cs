@@ -40,6 +40,20 @@ namespace RegistroTecnicos.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Servicio",
+                columns: table => new
+                {
+                    ServicioId = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Descripcion = table.Column<string>(type: "TEXT", nullable: false),
+                    Precio = table.Column<decimal>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Servicio", x => x.ServicioId);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "TiposTecnicos",
                 columns: table => new
                 {
@@ -145,6 +159,9 @@ namespace RegistroTecnicos.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "Servicio");
+
             migrationBuilder.DropTable(
                 name: "Trabajos");
 

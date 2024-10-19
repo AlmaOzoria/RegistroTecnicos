@@ -11,7 +11,7 @@ using RegistroTecnicos.DAL;
 namespace RegistroTecnicos.Migrations
 {
     [DbContext(typeof(Contexto))]
-    [Migration("20240920063222_Inicial")]
+    [Migration("20241002224835_Inicial")]
     partial class Inicial
     {
         /// <inheritdoc />
@@ -54,6 +54,24 @@ namespace RegistroTecnicos.Migrations
                     b.HasKey("PrioridadesId");
 
                     b.ToTable("Prioridades");
+                });
+
+            modelBuilder.Entity("RegistroTecnicos.Models.Servicio", b =>
+                {
+                    b.Property<int>("ServicioId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Descripcion")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal>("Precio")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("ServicioId");
+
+                    b.ToTable("Servicio");
                 });
 
             modelBuilder.Entity("RegistroTecnicos.Models.Tecnicos", b =>

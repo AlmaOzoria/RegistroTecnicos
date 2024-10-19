@@ -53,6 +53,24 @@ namespace RegistroTecnicos.Migrations
                     b.ToTable("Prioridades");
                 });
 
+            modelBuilder.Entity("RegistroTecnicos.Models.Servicio", b =>
+                {
+                    b.Property<int>("ServicioId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Descripcion")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal>("Precio")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("ServicioId");
+
+                    b.ToTable("Servicio");
+                });
+
             modelBuilder.Entity("RegistroTecnicos.Models.Tecnicos", b =>
                 {
                     b.Property<int>("TecnicoId")
