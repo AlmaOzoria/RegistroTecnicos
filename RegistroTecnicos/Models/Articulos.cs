@@ -11,16 +11,16 @@ public class Articulos
     public int ArticuloId { get; set; }
 
     [Required(ErrorMessage = "Este Campo debe de ser obligatorio")]
-    public string Descripcion { get; set; }
+    public string? Descripcion { get; set; }
 
     [Required(ErrorMessage = "Este Campo debe de ser obligatorio")]
-    public decimal Costo { get; set; } 
+    public decimal? Costo { get; set; } 
     
     
     [Required(ErrorMessage = "Este Campo debe de ser obligatorio")]
-    public decimal Precio { get; set; }
+    public decimal? Precio { get; set; }
 
     [Required(ErrorMessage = "Este Campo debe de ser obligatorio")]
-    public decimal Existencia { get; set; }
+    public decimal? Existencia { get; set; }
 
 }
