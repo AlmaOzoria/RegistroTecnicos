@@ -16,6 +16,7 @@ public class Contexto : DbContext
 
     public DbSet<Trabajos> Trabajos { get; set; }
     public DbSet<Prioridades> Prioridades { get; set; }
+    public DbSet<Articulos> Articulos { get; set; }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
 
@@ -24,8 +25,28 @@ public class Contexto : DbContext
             .WithMany(t => t.Tecnicos)
             .HasForeignKey(t => t.TiposTecnicosId);
 
+        modelBuilder.Entity<Articulos>().HasData(
+        new List<Articulos>()
+        {
+            new()
+            {
+                ArticuloId = 1,
+                Descripcion = "Artículo A",
+
+            },
+            new()
+            {
+                ArticuloId = 2,
+                Descripcion = "Artículo B",
+
+            }
+        }
+    ); 
+
         base.OnModelCreating(modelBuilder);
     }
+
     
+
 
 }
