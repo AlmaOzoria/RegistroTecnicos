@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace RegistroTecnicos.Migrations
 {
     /// <inheritdoc />
@@ -11,6 +13,22 @@ namespace RegistroTecnicos.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateTable(
+                name: "Articulos",
+                columns: table => new
+                {
+                    ArticuloId = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Descripcion = table.Column<string>(type: "TEXT", nullable: false),
+                    Costo = table.Column<decimal>(type: "TEXT", nullable: false),
+                    Precio = table.Column<decimal>(type: "TEXT", nullable: false),
+                    Existencia = table.Column<decimal>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Articulos", x => x.ArticuloId);
+                });
+
             migrationBuilder.CreateTable(
                 name: "Clientes",
                 columns: table => new
@@ -37,20 +55,6 @@ namespace RegistroTecnicos.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Prioridades", x => x.PrioridadesId);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Servicio",
-                columns: table => new
-                {
-                    ServicioId = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Descripcion = table.Column<string>(type: "TEXT", nullable: false),
-                    Precio = table.Column<decimal>(type: "TEXT", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Servicio", x => x.ServicioId);
                 });
 
             migrationBuilder.CreateTable(
@@ -129,6 +133,42 @@ namespace RegistroTecnicos.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "TrabajoDetalle",
+                columns: table => new
+                {
+                    DetalleId = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    TrabajosId = table.Column<int>(type: "INTEGER", nullable: true),
+                    ArticuloId = table.Column<int>(type: "INTEGER", nullable: true),
+                    Cantidad = table.Column<decimal>(type: "TEXT", nullable: false),
+                    Precio = table.Column<decimal>(type: "TEXT", nullable: false),
+                    Costo = table.Column<decimal>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TrabajoDetalle", x => x.DetalleId);
+                    table.ForeignKey(
+                        name: "FK_TrabajoDetalle_Articulos_ArticuloId",
+                        column: x => x.ArticuloId,
+                        principalTable: "Articulos",
+                        principalColumn: "ArticuloId");
+                    table.ForeignKey(
+                        name: "FK_TrabajoDetalle_Trabajos_TrabajosId",
+                        column: x => x.TrabajosId,
+                        principalTable: "Trabajos",
+                        principalColumn: "TrabajosId");
+                });
+
+            migrationBuilder.InsertData(
+                table: "Articulos",
+                columns: new[] { "ArticuloId", "Costo", "Descripcion", "Existencia", "Precio" },
+                values: new object[,]
+                {
+                    { 1, 1000.0m, "Teclado", 100m, 1500.0m },
+                    { 2, 20000.0m, "Tarjeta Grafica", 50m, 30000.0m }
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_Tecnicos_TiposTecnicosId",
                 table: "Tecnicos",
@@ -139,6 +179,16 @@ namespace RegistroTecnicos.Migrations
                 table: "Tecnicos",
                 column: "TiposTecnicosTipoTecnicoId",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TrabajoDetalle_ArticuloId",
+                table: "TrabajoDetalle",
+                column: "ArticuloId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TrabajoDetalle_TrabajosId",
+                table: "TrabajoDetalle",
+                column: "TrabajosId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Trabajos_ClientesId",
@@ -160,7 +210,10 @@ namespace RegistroTecnicos.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Servicio");
+                name: "TrabajoDetalle");
+
+            migrationBuilder.DropTable(
+                name: "Articulos");
 
             migrationBuilder.DropTable(
                 name: "Trabajos");
