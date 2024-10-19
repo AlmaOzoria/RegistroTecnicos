@@ -10,12 +10,14 @@ public class TrabajoDetalle
 
     public int? DetalleId { get; set; }
 
-    [ForeignKey("TrabajoId")]
-    public Trabajos? TrabajoId { get; set; }
+    [ForeignKey("TrabajosId")]
+    public Trabajos? Trabajos { get; set; }
+    public int? TrabajosId { get; set; }
 
 
-    [ForeignKey("articuloId")]
-    public Articulos? ArticuloId { get; set; }
+    [ForeignKey("ArticuloId")]
+    public Articulos? Articulos { get; set; }
+    public int? ArticuloId { get; set; }
 
 
     [Required(ErrorMessage = "Este Campo debe de ser obligatorio")]
