@@ -34,5 +34,5 @@ public class Trabajos
     [ForeignKey("prioridades")]
     public int PrioridadesId { get; set; }
 
-
+    public ICollection<TrabajoDetalle> TrabajoDetalle { get; set; }
 }
