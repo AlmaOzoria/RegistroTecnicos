@@ -1,6 +1,7 @@
 ﻿@page "/Trabajo/Details"
 @page "/Trabajo/Details/{TrabajosId:int}"
 @inject TrabajosServices trabajosServices
+@inject ArticuloServices articuloServices
 @inject NavigationManager navigationManager
 @rendermode InteractiveServer
 
@@ -25,6 +26,9 @@
                                 <li><strong>Descripcion:</strong> @Trabajos.Descripcion</li>
                                 <li><strong>Prioridad:</strong> @Trabajos.prioridades?.Descripcion</li>
                                 <li><strong>Monto:</strong> @Trabajos.Monto</li>
+                                <li><strong>Articulo:</strong> @TrabajoDetalle?.Articulos?.Descripcion</li>
+                                <li><strong>Cantidad:</strong> @TrabajoDetalle?.Cantidad</li>
+                                <li><strong>Precio:</strong> @TrabajoDetalle?.Precio</li>
                             </ul>
                         </div>
                     </div>
@@ -48,11 +52,16 @@ else
 @code {
     [Parameter]
     public int TrabajosId { get; set; }
+    public int ArticuloId { get; set; }
     public Trabajos? Trabajos { get; set; } = new Trabajos();
+    public TrabajoDetalle? TrabajoDetalle { get; set; }
+    public Articulos? Articulos { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
         Trabajos = await trabajosServices.Buscar(TrabajosId);
+        //TrabajoDetalle = await articuloServices.Buscar(ArticuloId);
+        //Articulos = await trabajosServices.Buscar();
     }
 
     public string ObtenerWhatsApp()
