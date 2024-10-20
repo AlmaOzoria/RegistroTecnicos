@@ -240,6 +240,7 @@
         }
         Trabajos.Monto += MontoArticulos ?? 0;
         MontoArticulos = 0;
+        Trabajos.TrabajoDetalle = ListaTrabajoDetalle;
         var guardar = await trabajosServices.Guardar(Trabajos);
         if (guardar)
         {
