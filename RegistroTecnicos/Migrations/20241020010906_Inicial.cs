@@ -141,7 +141,7 @@ namespace RegistroTecnicos.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     TrabajosId = table.Column<int>(type: "INTEGER", nullable: true),
                     ArticuloId = table.Column<int>(type: "INTEGER", nullable: true),
-                    Cantidad = table.Column<decimal>(type: "TEXT", nullable: false),
+                    Cantidad = table.Column<int>(type: "INTEGER", nullable: false),
                     Precio = table.Column<decimal>(type: "TEXT", nullable: false),
                     Costo = table.Column<decimal>(type: "TEXT", nullable: false)
                 },

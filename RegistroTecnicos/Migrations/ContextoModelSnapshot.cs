@@ -151,12 +151,11 @@ namespace RegistroTecnicos.Migrations
                     b.Property<int?>("ArticuloId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<decimal?>("Cantidad")
+                    b.Property<int?>("Cantidad")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("INTEGER");
 
-                    b.Property<decimal?>("Costo")
-                        .IsRequired()
+                    b.Property<decimal>("Costo")
                         .HasColumnType("TEXT");
 
                     b.Property<decimal?>("Precio")
