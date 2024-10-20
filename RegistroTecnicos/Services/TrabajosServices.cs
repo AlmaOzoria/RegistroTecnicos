@@ -74,10 +74,19 @@ public class TrabajosServices
             .Include(t => t.clientes)
             .Include(t => t.tecnicos)
             .Include(t => t.prioridades)
+            .Include(t => t.TrabajoDetalle)
+            .ThenInclude(td => td.Articulos)
             .FirstOrDefaultAsync(t => t.TrabajosId == id);
     }
 
+    public async Task<List<TrabajoDetalle>> ObtenerDetallesTrabajoId(int trabajosID)
+    {
+        var detalles = await _contexto.TrabajoDetalle
+            .Where(t => t.Trabajos.TrabajosId == trabajosID)
+            .ToListAsync();
 
+        return detalles;
+    }
 
     public async Task<List<Clientes>> ObtenerClientes()
     {
@@ -96,13 +105,14 @@ public class TrabajosServices
     public async Task<List<TrabajoDetalle>> ObtenerDetalle()
     {
         return await _contexto.TrabajoDetalle.ToListAsync();
+      
     }    
     public async Task<List<Articulos>> ObtenerArticulos()
     {
         return await _contexto.Articulos.ToListAsync();
     }
 
-
+    
 
 
 }

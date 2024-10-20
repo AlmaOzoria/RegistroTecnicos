@@ -21,13 +21,13 @@ public class TrabajoDetalle
 
 
     [Required(ErrorMessage = "Este Campo debe de ser obligatorio")]
-    public int Cantidad { get; set; } 
+    public int? Cantidad { get; set; } 
     
     [Required(ErrorMessage = "Este Campo debe de ser obligatorio")]
     public decimal? Precio { get; set; }
 
     [Required(ErrorMessage = "Este Campo debe de ser obligatorio")]
-    public decimal? Costo { get; set; }
+    public decimal Costo { get; set; }
 
    
 }
