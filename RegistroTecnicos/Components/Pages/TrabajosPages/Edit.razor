@@ -186,16 +186,21 @@
 
     protected override async Task OnInitializedAsync()
     {
-        if (TrabajosId != 0)
+        if(TrabajosId != 0)
         {
             ListaClientes = await trabajosServices.ObtenerClientes();
             ListaTecnicos = await trabajosServices.ObtenerTecnicos();
             ListaPrioridades = await trabajosServices.ObtenerPrioridades();
             ListaTrabajoDetalle = await trabajosServices.ObtenerDetalle();
-             ListaArticulo = await trabajosServices.ObtenerArticulos();
+            ListaArticulo = await trabajosServices.ObtenerArticulos();
+            ListaTrabajoDetalle = await trabajosServices.ObtenerDetallesTrabajoId(TrabajosId) ?? new List<TrabajoDetalle>();
+
             await CalcularTotal();
             await Buscar();
+            
         }
+  
+        
     }
 
     public async Task Buscar()
@@ -252,13 +257,13 @@
 
         if (articuloSeleccionado == null || TrabajoDetalle.Cantidad <= 0)
         {
-            //alertaError = "Debe seleccionar un artículo y una cantidad válida.";
+
             return;
         }
 
         if (articuloSeleccionado.Existencia < TrabajoDetalle.Cantidad)
         {
-            //alertaError = "No hay suficiente existencia del artículo para completar la operación.";
+
             return;
         }
 
@@ -281,7 +286,7 @@
 
     private async Task CalcularTotal()
     {
-       MontoArticulos = ListaTrabajoDetalle.Sum(d => (d.Precio ?? 0) * d.Cantidad);
+        MontoArticulos = ListaTrabajoDetalle.Sum(d => (d.Precio ?? 0) * d.Cantidad);
         Trabajos.Monto = MontoArticulos ?? 0;
     }
 
@@ -294,6 +299,8 @@
         TrabajoDetalle.Cantidad = detalle.Cantidad;
         TrabajoDetalle.Precio = detalle.Precio ?? 0;
         CalcularTotal();
+        StateHasChanged();
     }
 
+ 
 }
