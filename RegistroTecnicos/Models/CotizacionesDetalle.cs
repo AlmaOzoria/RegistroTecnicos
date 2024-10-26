@@ -23,7 +23,7 @@ public class CotizacionesDetalle
     
     [Required(ErrorMessage = "El Campo Precio es obligatorio.")]
     [Range(0, double.MaxValue, ErrorMessage = "El Precio debe ser un valor positivo.")]
-    public decimal Precio { get; set; }
+    public decimal? Precio { get; set; }
 
     public Articulos? Articulos { get; set; }
     [ForeignKey("articulos")]
