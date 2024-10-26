@@ -1,0 +1,139 @@
+﻿@page "/Cotizacion/Index"
+@inject CotizacionServices cotizacionServices
+@rendermode InteractiveServer
+
+<EditForm Model="ListaCotizaciones" class="border shadow-lg p-3 rounded">
+    <div class="card-header bg-primary text-white text-center py-2 rounded">
+        <h3 style="font-weight: bold;" class="mb-0 font-weight-bold">Consulta de Cotizaciones</h3>
+    </div>
+    <div class="card-body">
+        <div class="row mb-3 align-items-end">
+
+            @*Filtro*@
+            <div class="col-md-3">
+                <label for="Filtro" class="form-label">Filtrar por:</label>
+                <select @bind="filtro" class="form-select">
+                    <option value="id">ID</option>
+                    <option value="fecha">Fecha</option>
+                    <option value="clienteId">ClienteId</option>
+                    <option value="observacion">Observacion</option>
+                </select>
+            </div>
+
+            @*Barra Busqueda*@
+            <div class="col-md-6">
+                <label for="ValorFiltro" class="form-label">Búsqueda:</label>
+                <div class="input-group">
+                    <input @bind="valorFiltro" class="form-control" placeholder="Buscar" />
+                    <button @onclick="Buscar" class="btn btn-outline-primary" type="button">
+                        <span class="bi bi-search"></span> Buscar
+                    </button>
+                </div>
+            </div>
+
+            @*Boton Crear*@
+            <div class="col-md-3 text-end">
+                <a href="/Cotizacion/Create" class="btn btn-success" type="button"><span class="bi bi-floppy"></span> Crear </a>
+            </div>
+        </div>
+    </div>
+
+    @*Tabla*@
+    <table class="table table-bordered text-center">
+        <thead class="bg-primary text-white">
+            <tr>
+                <th>CotizacionId</th>
+                <th>Fecha</th>
+                <th>Cliente</th>
+                <th>Observación</th>
+                <th>Monto</th>
+                <th>Ver</th>
+                <th>Editar</th>
+                <th>Eliminar</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach (var cotizaciones in ListaCotizaciones)
+            {
+                <tr>
+                    <td>@cotizaciones.CotizacionId</td>
+                    <td>@cotizaciones.Fecha.ToString("dd/MM/yyyy")</td>
+                    <td>@cotizaciones.clientes?.Nombres</td>
+                    <td>@cotizaciones.Observacion</td>
+                    <td>@cotizaciones.Monto</td>
+
+
+
+                    <td>
+
+                        @*Boton Details*@
+                        <a href="/Cotizacion/Details/@cotizaciones.CotizacionId" style="border: none; background-color: transparent;" class="btn-detalle">
+                            <i class="bi bi-eye" style="font-size: 2rem;"></i>
+                        </a>
+
+                    </td>
+                    <td>
+                        @*Boton Editar*@
+                        <a href="/Cotizacion/Edit/@cotizaciones.CotizacionId" style="border: none; background-color: transparent;" class="btn-editar">
+                            <span class="bi bi-marker-tip" style="font-size: 2rem;"></span>
+                        </a>
+                    </td>
+
+                    <td>
+                        @*Boton Eliminar*@
+                        <a href="/Cotizacion/Delete/@cotizaciones.CotizacionId" style="border: none; background-color: transparent;" class="btn-eliminar">
+                            <i class="bi bi-trash3" style="font-size: 2rem;"></i>
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <div class="card-footer text-start">
+        <p> Total de  Cotizaciones: @ListaCotizaciones.Count</p>
+    </div>
+</EditForm>
+
+@code {
+    public Cotizaciones cotizaciones { get; set; } = new Cotizaciones();
+    public List<Cotizaciones> ListaCotizaciones = new List<Cotizaciones>();
+    private string valorFiltro = "";
+    private string filtro = "Id";
+
+    protected override async Task OnInitializedAsync()
+    {
+        ListaCotizaciones = cotizacionServices.Listar(c => true);
+    }
+
+    public async Task Buscar()
+    {
+        if (!string.IsNullOrWhiteSpace(valorFiltro))
+        {
+            if (filtro == "id" && int.TryParse(valorFiltro, out int CotizacionId))
+            {
+                ListaCotizaciones = cotizacionServices.Listar(c => c.CotizacionId == CotizacionId);
+            }
+            else if (filtro == "fecha" && DateTime.TryParse(valorFiltro, out DateTime fecha))
+            {
+                ListaCotizaciones = cotizacionServices.Listar(c => c.Fecha.Date == fecha.Date);
+            }
+           else if (filtro == "clienteid" && int.TryParse(valorFiltro, out int ClientesId))
+            {
+                ListaCotizaciones = cotizacionServices.Listar(c => c.ClientesId == ClientesId);
+            }
+            else if (filtro == "observaciones")
+            {
+                ListaCotizaciones = cotizacionServices.Listar(c => c.Observacion != null && c.Observacion == valorFiltro);
+            }
+
+        }
+        else
+        {
+            ListaCotizaciones = cotizacionServices.Listar(t => true);
+        }
+    }
+
+
+}
+
