@@ -47,7 +47,6 @@
                 <th>Cliente</th>
                 <th>Observación</th>
                 <th>Monto</th>
-                <th>Ver</th>
                 <th>Editar</th>
                 <th>Eliminar</th>
             </tr>
@@ -64,15 +63,6 @@
                     <td>@cotizaciones.Monto</td>
 
 
-
-                    <td>
-
-                        @*Boton Details*@
-                        <a href="/Cotizacion/Details/@cotizaciones.CotizacionId" style="border: none; background-color: transparent;" class="btn-detalle">
-                            <i class="bi bi-eye" style="font-size: 2rem;"></i>
-                        </a>
-
-                    </td>
                     <td>
                         @*Boton Editar*@
                         <a href="/Cotizacion/Edit/@cotizaciones.CotizacionId" style="border: none; background-color: transparent;" class="btn-editar">
