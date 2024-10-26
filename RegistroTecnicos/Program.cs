@@ -36,6 +36,8 @@ namespace RegistroTecnicos
 
             builder.Services.AddScoped<ArticuloServices>();
 
+            builder.Services.AddScoped<CotizacionServices>();
+
 
 
             var app = builder.Build();
