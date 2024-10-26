@@ -1,4 +1,5 @@
-using Microsoft.EntityFrameworkCore;
+global using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using RegistroTecnicos.Components;
 using RegistroTecnicos.DAL;
 using RegistroTecnicos.Services;
@@ -17,11 +18,14 @@ namespace RegistroTecnicos
             builder.Services.AddSingleton<Radzen.NotificationService>();
             builder.Services.AddBlazorBootstrap();
 
-            // Agregando el Construtor
-            var ConStr = builder.Configuration.GetConnectionString("ConStr");
+            // Agregar el constructor para obtener la cadena de conexión
+            //var ConStr = builder.Configuration.GetConnectionString("SqlConStr");
 
-            // Agregando el contexto
-            builder.Services.AddDbContext<Contexto>(Options => Options.UseSqlite(ConStr));
+            // Configurar el contexto con SQL Server
+            builder.Services.AddDbContext<Contexto>(options =>
+            options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+
 
             //Inyectando service
             builder.Services.AddScoped<TecnicoServices>();
