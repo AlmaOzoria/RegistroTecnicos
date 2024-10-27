@@ -97,7 +97,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        ListaClientes =  clientesServices.Listar(c => true);
+        ListaClientes = await clientesServices.Listar(c => true);
     }
     public async Task Buscar()
     {
@@ -105,24 +105,24 @@
         {
             if (filtro == "id" && int.TryParse(valorFiltro, out int ClientesId))
             {
-                ListaClientes =  clientesServices.Listar(t => t.ClientesId == ClientesId);
+                ListaClientes = await clientesServices.Listar(t => t.ClientesId == ClientesId);
             }
             else if (filtro == "nombre")
             {
                 string filtroMinuscula = valorFiltro.ToLower();
-                ListaClientes =  clientesServices.Listar(t => t.Nombres.ToLower().Contains(filtroMinuscula));
+                ListaClientes = await clientesServices.Listar(t => t.Nombres.ToLower().Contains(filtroMinuscula));
 
             }
             else if (filtro == "whatsapp")
             {
-                ListaClientes =  clientesServices.Listar(t => t.WhatsApp == null);
+                ListaClientes = await  clientesServices.Listar(t => t.WhatsApp == null);
             }
           
 
         }
         else
         {
-            ListaClientes =  clientesServices.Listar(t => true);
+            ListaClientes = await clientesServices.Listar(t => true);
         }
     }
 
