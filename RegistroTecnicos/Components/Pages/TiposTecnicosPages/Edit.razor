@@ -71,22 +71,28 @@
 
     public async Task Guardar()
     {
-        if (Validar())
+        if (await Validar()) 
         {
             return;
         }
+
         var guardo = await tiposTecnicosServices.Guardar(TiposTecnicos);
-        if(guardo)
+        if (guardo)
         {
             Nuevo();
         }
     }
 
-    public bool Validar()
+    public async Task<bool> Validar() 
     {
-        Existe = tiposTecnicosServices.Listar(t => t.Descripcion!.ToLower() == TiposTecnicos.Descripcion!.ToLower() && t.TipoTecnicoId != TiposTecnicos.TipoTecnicoId).Any();
-        return Existe;
+        var existe = await tiposTecnicosServices.Listar(t =>
+            t.Descripcion!.ToLower() == TiposTecnicos.Descripcion!.ToLower() &&
+            t.TipoTecnicoId != TiposTecnicos.TipoTecnicoId
+        );
+
+        return existe.Any();
     }
+
 
     public void Nuevo()
     {
