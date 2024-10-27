@@ -42,7 +42,7 @@
     <table class="table table-bordered text-center">
         <thead class="bg-primary text-white">
             <tr>
-                <th>Id</th>
+                <th>Tipo TécnicoId</th>
                 <th>Descripción</th>
                 <th>Ver</th>
                 <th>Editar</th>
@@ -92,34 +92,34 @@
     private string valorFiltro = "";
     private string filtro = "Id";
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
-        ListarTiposTecnicos = tiposTecnicosService.Listar(c => true);
+        ListarTiposTecnicos = await tiposTecnicosService.Listar(c => true);
     }
 
-    public void Buscar()
+    public async void Buscar()
     {
         if (valorFiltro.Trim() != "")
         {
             if (filtro == "id" && int.TryParse(valorFiltro, out int IdTipoTecnico) )
             {
-                ListarTiposTecnicos = tiposTecnicosService.Listar(t => t.TipoTecnicoId == IdTipoTecnico);
+                ListarTiposTecnicos = await tiposTecnicosService.Listar(t => t.TipoTecnicoId == IdTipoTecnico);
             }
             else if (filtro == "nombre")
             {
-                ListarTiposTecnicos = tiposTecnicosService.Listar(t => t.Descripcion == valorFiltro);
+                ListarTiposTecnicos = await tiposTecnicosService.Listar(t => t.Descripcion == valorFiltro);
             }
             else if (filtro == "descripcion")
             {
                 string filtroMinuscula = valorFiltro.ToLower();
-                ListarTiposTecnicos = tiposTecnicosService.Listar(t => t.Descripcion.ToLower().Contains(filtroMinuscula));
+                ListarTiposTecnicos = await tiposTecnicosService.Listar(t => t.Descripcion.ToLower().Contains(filtroMinuscula));
             }
 
 
         }
         else
         {
-            ListarTiposTecnicos = tiposTecnicosService.Listar(t => true);
+            ListarTiposTecnicos =await  tiposTecnicosService.Listar(t => true);
         }
 
     }

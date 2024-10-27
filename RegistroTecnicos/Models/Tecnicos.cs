@@ -7,8 +7,7 @@ namespace RegistroTecnicos.Models;
 public class Tecnicos
 {
     [Key]
-
-    [Range(1, int.MaxValue, ErrorMessage = "El ID debe ser mayor o igual que 1.")]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int TecnicoId { get; set; }
 
     [Required(ErrorMessage ="El Campo Nombre es obligatorio")]

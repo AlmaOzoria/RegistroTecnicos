@@ -78,23 +78,28 @@
         }
     }
 
-    public async Task Guardar()
+   public async Task Guardar()
     {
-        if (Validar())
+        if (await Validar())
         {
             return;
         }
+
         var guardo = await clientesServices.Guardar(Clientes);
-        if(guardo)
+        if (guardo)
         {
             Nuevo();
         }
     }
 
-    public bool Validar()
+    public async Task<bool> Validar()
     {
-        Existe = clientesServices.Listar(t => t.Nombres!.ToLower() == Clientes.Nombres!.ToLower() && t.ClientesId != Clientes.ClientesId).Any();
-        return Existe;
+        var listaClientes = await clientesServices.Listar(t =>
+            t.Nombres!.ToLower() == Clientes.Nombres!.ToLower() &&
+            t.ClientesId != Clientes.ClientesId
+        );
+
+        return listaClientes.Any();
     }
 
     public void Nuevo()

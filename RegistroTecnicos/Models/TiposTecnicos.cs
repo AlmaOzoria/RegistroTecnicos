@@ -1,12 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using RegistroTecnicos.Models;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace RegistroTecnicos.Models;
 
 public class TiposTecnicos
 {
     [Key]
-    [Range(1, int.MaxValue, ErrorMessage = "El ID debe ser mayor o igual  que 1 ")]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int TipoTecnicoId { get; set; }
 
     [Required(ErrorMessage = " La descripcion es obligatoria.")]

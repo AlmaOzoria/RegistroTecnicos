@@ -93,7 +93,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        ListaCotizaciones = cotizacionServices.Listar(c => true);
+        ListaCotizaciones = await cotizacionServices.Listar(c => true);
     }
 
     public async Task Buscar()
@@ -102,25 +102,25 @@
         {
             if (filtro == "id" && int.TryParse(valorFiltro, out int CotizacionId))
             {
-                ListaCotizaciones = cotizacionServices.Listar(c => c.CotizacionId == CotizacionId);
+                ListaCotizaciones = await cotizacionServices.Listar(c => c.CotizacionId == CotizacionId);
             }
             else if (filtro == "fecha" && DateTime.TryParse(valorFiltro, out DateTime fecha))
             {
-                ListaCotizaciones = cotizacionServices.Listar(c => c.Fecha.Date == fecha.Date);
+                ListaCotizaciones = await cotizacionServices.Listar(c => c.Fecha.Date == fecha.Date);
             }
            else if (filtro == "clienteid" && int.TryParse(valorFiltro, out int ClientesId))
             {
-                ListaCotizaciones = cotizacionServices.Listar(c => c.ClientesId == ClientesId);
+                ListaCotizaciones = await cotizacionServices.Listar(c => c.ClientesId == ClientesId);
             }
             else if (filtro == "observaciones")
             {
-                ListaCotizaciones = cotizacionServices.Listar(c => c.Observacion != null && c.Observacion == valorFiltro);
+                ListaCotizaciones = await cotizacionServices.Listar(c => c.Observacion != null && c.Observacion == valorFiltro);
             }
 
         }
         else
         {
-            ListaCotizaciones = cotizacionServices.Listar(t => true);
+            ListaCotizaciones = await cotizacionServices.Listar(t => true);
         }
     }
 

@@ -5,31 +5,27 @@ using System.Linq.Expressions;
 
 namespace RegistroTecnicos.Services;
 
-public class ClientesServices
+public class ClientesServices(IDbContextFactory<Contexto> DbFactory)
 {
-    private readonly Contexto _contexto;
 
-    public ClientesServices(Contexto contexto)
-    {
-
-        _contexto = contexto;
-
-    }
 
     public async Task<bool> Insertar(Clientes clientes)
     {
+        await using var _contexto = await DbFactory.CreateDbContextAsync();
         _contexto.Clientes.Add(clientes);
         return await _contexto.SaveChangesAsync() > 0;
     }
 
     public async Task<bool> Existe(int clientesId)
     {
+        await using var _contexto = await DbFactory.CreateDbContextAsync();
         return await _contexto.Clientes.AnyAsync(t => t.ClientesId== clientesId);
 
     }
 
     public async Task<bool> Modificar(Clientes clientes)
     {
+        await using var _contexto = await DbFactory.CreateDbContextAsync();
         _contexto.Update(clientes);
         return await _contexto.SaveChangesAsync() > 0;
     }
@@ -50,6 +46,7 @@ public class ClientesServices
 
     public async Task<bool> Eliminar(int id)
     {
+        await using var _contexto = await DbFactory.CreateDbContextAsync();
         var clientes = await _contexto.Clientes
             .Where(t => t.ClientesId == id)
             .ExecuteDeleteAsync();
@@ -57,16 +54,20 @@ public class ClientesServices
 
     }
 
-    public List<Clientes> Listar(Expression<Func<Clientes, bool>> criterio)
+    public async Task<List<Clientes>> Listar(Expression<Func<Clientes, bool>> criterio)
     {
-        return _contexto.Clientes
+        using var _contexto = await DbFactory.CreateDbContextAsync();
+        return await _contexto.Clientes
             .AsNoTracking()
             .Where(criterio)
-            .ToList();
+            .ToListAsync();
     }
+
 
     public async Task<Clientes?> Buscar(int id)
     {
+       
+        await using var _contexto = await DbFactory.CreateDbContextAsync();
         return await _contexto.Clientes
             .AsNoTracking()
             .FirstOrDefaultAsync(t => t.ClientesId == id);
@@ -74,6 +75,7 @@ public class ClientesServices
 
     public async Task<bool> ExiteNombres(string nombre, int? clienteId = null)
     {
+        await using var _contexto = await DbFactory.CreateDbContextAsync();
         if (clienteId.HasValue)
         {
             return await _contexto.Clientes.AnyAsync(t => t.Nombres == nombre && t.ClientesId != clienteId);

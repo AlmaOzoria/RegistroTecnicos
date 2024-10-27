@@ -5,48 +5,57 @@ using Microsoft.EntityFrameworkCore;
 
 namespace RegistroTecnicos.Services;
 
-public class CotizacionServices
+public class CotizacionServices(IDbContextFactory<Contexto> DbFactory)
 {
-     private readonly Contexto _contexto;
 
-        public CotizacionServices(Contexto contexto)
-        {
 
-            _contexto = contexto;
-
-        }
-
-        public async Task<bool> Insertar(Cotizaciones cotizaciones)
+    public async Task<bool> Insertar(Cotizaciones cotizaciones)
+    {
+        await using var _contexto = await DbFactory.CreateDbContextAsync();
+        try
         {
             _contexto.Cotizaciones.Add(cotizaciones);
             return await _contexto.SaveChangesAsync() > 0;
         }
-
-        public async Task<bool> Existe(int cotizacionId)
+        catch (DbUpdateException ex)
         {
+           
+            Console.WriteLine($"Error al insertar: {ex.InnerException?.Message}");
+            return false;
+        }
+    }
+
+
+    public async Task<bool> Existe(int cotizacionId)
+        {
+            await using var _contexto = await DbFactory.CreateDbContextAsync();
             return await _contexto.Cotizaciones.AnyAsync(c => c.CotizacionId == cotizacionId);
 
         }
 
         public async Task<bool> Modificar(Cotizaciones cotizaciones)
         {
+            await using var _contexto = await DbFactory.CreateDbContextAsync();
             _contexto.Update(cotizaciones);
             return await _contexto.SaveChangesAsync() > 0;
         }
 
         public async Task<bool> Guardar(Cotizaciones cotizaciones)
         {
-
-            if (!await Existe(cotizaciones.CotizacionId))
+            if (cotizaciones.CotizacionId == 0) 
+            {
                 return await Insertar(cotizaciones);
+            }
             else
             {
                 return await Modificar(cotizaciones);
             }
         }
 
-        public async Task<bool> Eliminar(int id)
+
+    public async Task<bool> Eliminar(int id)
         {
+            await using var _contexto = await DbFactory.CreateDbContextAsync();
             var cotizaciones = await _contexto.Cotizaciones
                 .Where(c => c.CotizacionId == id)
                 .ExecuteDeleteAsync();
@@ -54,19 +63,24 @@ public class CotizacionServices
 
         }
 
-        public List<Cotizaciones> Listar(Expression<Func<Cotizaciones, bool>> criterio)
+        public async Task<List<Cotizaciones>> Listar(Expression<Func<Cotizaciones, bool>> criterio)
         {
-            return _contexto.Cotizaciones
+            using var _contexto = await DbFactory.CreateDbContextAsync();
+
+            return await _contexto.Cotizaciones
                 .AsNoTracking()
                 .Include(c => c.clientes)
                 .Include(t => t.CotizacionesDetalle)
                 .Where(criterio)
-                .ToList();
+                .ToListAsync();
         }
 
-        public async Task<Cotizaciones?> Buscar(int id)
+
+         public async Task<Cotizaciones?> Buscar(int id)
         {
-            return await _contexto.Cotizaciones
+                 await using var _contexto = await DbFactory.CreateDbContextAsync();
+
+                 return await _contexto.Cotizaciones
                 .AsNoTracking()
                 .Include(c => c.clientes)
                 .Include(c => c.CotizacionesDetalle)
@@ -76,6 +90,7 @@ public class CotizacionServices
 
         public async Task<List<CotizacionesDetalle>> ObtenerDetallesCotizacionId(int cotizacionId)
         {
+            await using var _contexto = await DbFactory.CreateDbContextAsync();
             var detalles = await _contexto.CotizacionesDetalle
                 .Where(c => c.cotizaciones.CotizacionId == cotizacionId)
                 .ToListAsync();
@@ -85,21 +100,25 @@ public class CotizacionServices
 
         public async Task<List<Clientes>> ObtenerClientes()
         {
+            await using var _contexto = await DbFactory.CreateDbContextAsync();
             return await _contexto.Clientes.ToListAsync();
         }
 
         public async Task<List<Cotizaciones>> ObtenerCotizaciones()
         {
+            await using var _contexto = await DbFactory.CreateDbContextAsync();
             return await _contexto.Cotizaciones.ToListAsync();
         }
 
         public async Task<List<CotizacionesDetalle>> ObtenerDetalle()
         {
+            await using var _contexto = await DbFactory.CreateDbContextAsync();
             return await _contexto.CotizacionesDetalle.ToListAsync();
 
         }
         public async Task<List<Articulos>> ObtenerArticulos()
         {
+            await using var _contexto = await DbFactory.CreateDbContextAsync();
             return await _contexto.Articulos.ToListAsync();
         }
 

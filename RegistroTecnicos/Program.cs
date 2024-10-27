@@ -22,7 +22,7 @@ namespace RegistroTecnicos
             //var ConStr = builder.Configuration.GetConnectionString("SqlConStr");
 
             // Configurar el contexto con SQL Server
-            builder.Services.AddDbContext<Contexto>(options =>
+            builder.Services.AddDbContextFactory<Contexto>(options =>
             options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 
