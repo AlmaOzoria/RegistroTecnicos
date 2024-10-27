@@ -7,16 +7,26 @@ namespace RegistroTecnicos.Services;
 
 public class CotizacionServices(IDbContextFactory<Contexto> DbFactory)
 {
-     
-  
-        public async Task<bool> Insertar(Cotizaciones cotizaciones)
+
+
+    public async Task<bool> Insertar(Cotizaciones cotizaciones)
+    {
+        await using var _contexto = await DbFactory.CreateDbContextAsync();
+        try
         {
-            await using var _contexto = await DbFactory.CreateDbContextAsync();
             _contexto.Cotizaciones.Add(cotizaciones);
             return await _contexto.SaveChangesAsync() > 0;
         }
+        catch (DbUpdateException ex)
+        {
+           
+            Console.WriteLine($"Error al insertar: {ex.InnerException?.Message}");
+            return false;
+        }
+    }
 
-        public async Task<bool> Existe(int cotizacionId)
+
+    public async Task<bool> Existe(int cotizacionId)
         {
             await using var _contexto = await DbFactory.CreateDbContextAsync();
             return await _contexto.Cotizaciones.AnyAsync(c => c.CotizacionId == cotizacionId);
@@ -32,16 +42,18 @@ public class CotizacionServices(IDbContextFactory<Contexto> DbFactory)
 
         public async Task<bool> Guardar(Cotizaciones cotizaciones)
         {
-
-            if (!await Existe(cotizaciones.CotizacionId))
+            if (cotizaciones.CotizacionId == 0) 
+            {
                 return await Insertar(cotizaciones);
+            }
             else
             {
                 return await Modificar(cotizaciones);
             }
         }
 
-        public async Task<bool> Eliminar(int id)
+
+    public async Task<bool> Eliminar(int id)
         {
             await using var _contexto = await DbFactory.CreateDbContextAsync();
             var cotizaciones = await _contexto.Cotizaciones
