@@ -220,7 +220,7 @@
 
     public async Task Guardar()
     {
-        if (Validar())
+        if (await Validar()) 
         {
             return;
         }
@@ -230,20 +230,17 @@
         {
             Nuevo();
         }
-
     }
 
-
-    public bool Validar()
+    public async Task<bool> Validar() 
     {
-        Existe = trabajosServices.Listar(t => t.TrabajosId != Trabajos.TrabajosId).Any();
-        if (Existe)
-        {
-            return true;
-        }
+        var existe = await trabajosServices.Listar(t =>
+            t.TrabajosId != Trabajos.TrabajosId
+        );
 
-        return false;
+        return existe.Any();
     }
+
 
     public void Nuevo()
     {
