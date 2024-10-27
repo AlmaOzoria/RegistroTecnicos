@@ -106,7 +106,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        ListaTrabajos = trabajosServices.Listar(c => true);
+        ListaTrabajos = await trabajosServices.Listar(c => true);
     }
 
     public async Task Buscar()
@@ -115,21 +115,21 @@
         {
             if (filtro == "id" && int.TryParse(valorFiltro, out int TrabajosId))
             {
-                ListaTrabajos = trabajosServices.Listar(t => t.TrabajosId == TrabajosId);
+                ListaTrabajos = await  trabajosServices.Listar(t => t.TrabajosId == TrabajosId);
             }
             else if (filtro == "fecha" && DateTime.TryParse(valorFiltro, out DateTime fecha))
             {
-                ListaTrabajos = trabajosServices.Listar(t => t.Fecha.Date == fecha.Date);
+                ListaTrabajos = await trabajosServices.Listar(t => t.Fecha.Date == fecha.Date);
             }
             else if (filtro == "cliente")
             {
-                ListaTrabajos = trabajosServices.Listar(t => t.clientes != null && t.clientes.Nombres == valorFiltro);
+                ListaTrabajos = await trabajosServices.Listar(t => t.clientes != null && t.clientes.Nombres == valorFiltro);
             }
 
         }
         else
         {
-            ListaTrabajos = trabajosServices.Listar(t => true);
+            ListaTrabajos = await trabajosServices.Listar(t => true);
         }
     }
 
