@@ -6,8 +6,7 @@ namespace RegistroTecnicos.Models;
 public class Cotizaciones
 {
     [Key]
-
-    [Required(ErrorMessage = "El Campo Trabajo es obligatorio")]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int CotizacionId { get; set; }
 
     [Required(ErrorMessage = "El Campo Cliente es obligatorio")]

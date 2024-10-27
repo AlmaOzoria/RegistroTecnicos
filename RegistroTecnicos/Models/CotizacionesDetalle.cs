@@ -6,8 +6,7 @@ namespace RegistroTecnicos.Models;
 public class CotizacionesDetalle
 {
     [Key]
-
-    [Required(ErrorMessage = "El Campo Detalle es obligatorio")]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int DetalleId { get; set; }
 
     [Required(ErrorMessage = "El Campo Contizaciones es obligatorio")]
