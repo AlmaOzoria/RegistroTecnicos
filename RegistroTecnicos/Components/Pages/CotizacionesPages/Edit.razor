@@ -199,9 +199,9 @@
         }
     }
 
-    public async Task Guardar()
+      public async Task Guardar()
     {
-        if (Validar())
+        if (await Validar())
         {
             return;
         }
@@ -211,20 +211,19 @@
         {
             Nuevo();
         }
-
     }
 
-
-    public bool Validar()
+    public async Task<bool> Validar()
     {
-        Existe = cotizacionServices.Listar(c => c.CotizacionId != Cotizaciones.CotizacionId).Any();
-        if (Existe)
-        {
-            return true;
-        }
+        var listaCotizaciones = await cotizacionServices.Listar(c => 
+            c.CotizacionId != Cotizaciones.CotizacionId
+        );
 
-        return false;
+        return listaCotizaciones.Any();
     }
+
+
+
 
     public void Nuevo()
     {
