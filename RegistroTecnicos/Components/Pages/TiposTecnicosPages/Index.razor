@@ -42,7 +42,7 @@
     <table class="table table-bordered text-center">
         <thead class="bg-primary text-white">
             <tr>
-                <th>Id</th>
+                <th>Tipo TécnicoId</th>
                 <th>Descripción</th>
                 <th>Ver</th>
                 <th>Editar</th>
@@ -92,7 +92,7 @@
     private string valorFiltro = "";
     private string filtro = "Id";
 
-    protected override async void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
         ListarTiposTecnicos = await tiposTecnicosService.Listar(c => true);
     }
