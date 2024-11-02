@@ -1,4 +1,4 @@
-namespace RegistroTecnicos.Api
+namespace RegistroTecnicos
 {
     public class WeatherForecast
     {

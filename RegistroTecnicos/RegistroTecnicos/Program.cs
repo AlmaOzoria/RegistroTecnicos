@@ -1,5 +1,5 @@
 
-namespace RegistroTecnicos.Api
+namespace RegistroTecnicos
 {
     public class Program
     {
